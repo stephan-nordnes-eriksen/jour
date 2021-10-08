@@ -8,23 +8,27 @@ import { openFile } from './crossPlatformFileOpener.js';
 
 const cli = meow(`
 	Usage
-	  $ journal <input>
-
+		$ journal
+		$ journal <title>
 	Options
-	  --postfix  Lorem ipsum  [Default: rainbows]
-
+		--template  Which template to use. Only one now  [Default: memo]
+		--setup		Setup journal directory
 	Examples
-	  $ journal setup <storage-folder>
-	  Setup your journal to target this folder
-	  $ journal new
-	  creates a new journal entry, tagged today.
+		$ journal setup ./my/desired/journal/directory
+			Setup your journal to target this folder
+		$ journal
+		creates a new journal entry, tagged today.
 `, {
 	// input: ['setup', 'new'],
 	importMeta: import.meta,
 	flags: {
-		postfix: {
+		setup: {
+			type: 'boolean',
+			alias: 's'
+		},
+		template: {
 			type: 'string',
-			default: 'rainbows'
+			default: 'memo'
 		}
 	}
 });
@@ -34,11 +38,11 @@ const randomAwesomeShorts = [
 	"Had dinner with family",
 	"Hiked a mountain",
 ]
-function journalTemplate(currentDate){
+function journalTemplate(currentDate, title = ""){
 	const currentDateString = currentDate.toDateString()
 	return `Journal - ${currentDateString}
 # Short
-	${randomAwesomeShorts[Math.round(Math.random() * randomAwesomeShorts.length)]}
+	${title || randomAwesomeShorts[Math.round(Math.random() * randomAwesomeShorts.length)]}
 # Long
 	...
 
@@ -58,12 +62,12 @@ function getJournalPath(){
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-switch (cli.input[0]) {
-	case 'setup':
-		const journalPath = cli.input[1]
+function process(){
+	if(cli.flags.setup){
+		const journalPath = cli.input[0]
 		if(!journalPath){
-			print('Please provide a valid path')
-			break
+			console.log('Please provide a valid path')
+			return
 		}
 		let absoluteJournalPath = journalPath
 		if(!fs.existsSync(journalPath)){
@@ -73,22 +77,19 @@ switch (cli.input[0]) {
 		}
 		fs.writeFileSync(getJournalSettingsPath(), absoluteJournalPath)
 		console.log('Journal location saved to', absoluteJournalPath)
-		break
-	case 'list':
-
-	case 'new':
-
-	default:
+	} else {
 		const journalDirectory = getJournalPath()
 		if(!journalDirectory || !fs.existsSync(journalDirectory)) {
 			console.log('Journal directory not available. Setup with `journal setup <path>`')
-			break
+			return
 		}
+		const title = cli.input.join(' ')
 		const currentDate = new Date()
-		const template = journalTemplate(currentDate)
+		const template = journalTemplate(currentDate, title)
 		const journalEntryPath = path.join(journalDirectory, `journal-${currentDate.toDateString().split(' ').join('-')}.md`)
 		fs.writeFileSync(journalEntryPath, template)
 		openFile(journalEntryPath)
 		console.log('Journal set created at', journalEntryPath)
-		break
+	}
 }
+process()
