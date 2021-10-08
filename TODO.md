@@ -1,0 +1,1 @@
+- [X] Do not overwrite existing journal entries

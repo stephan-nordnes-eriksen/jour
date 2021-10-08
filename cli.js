@@ -91,7 +91,10 @@ function process(){
 		const title = cli?.input?.join(' ') || ''
 		const currentDate = new Date()
 		const template = journalTemplate(currentDate, title)
-		const journalEntryPath = path.join(journalDirectory, `journal-${currentDate.toDateString().split(' ').join('-')}.md`)
+		let journalEntryPath = path.join(journalDirectory, `journal-${currentDate.toDateString().split(' ').join('-')}.md`)
+		if(fs.existsSync(journalEntryPath)){
+			journalEntryPath = journalEntryPath.slice(0, -3) + '-' + currentDate.getTime() + '.md'
+		}
 		fs.writeFileSync(journalEntryPath, template)
 		openFile(journalEntryPath)
 		console.log('Journal set created at', journalEntryPath)
