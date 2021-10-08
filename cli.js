@@ -12,27 +12,32 @@ const cli = meow(`
 		$ journal <title>
 	Options
 		--template  Which template to use. Only one now  [Default: memo]
-		--setup		Setup journal directory
+		--dir		Setup journal directory
 	Examples
-		$ journal setup ./my/desired/journal/directory
+		$ journal --dir ./my/desired/journal/directory
 			Setup your journal to target this folder
 		$ journal
-		creates a new journal entry, tagged today.
+			creates a new journal entry, tagged today.
+		$ journal This is my journal title entry
+			creates a new journal entry, tagged today, with the provided written title.
+		$ journal --template=memo Todays Title
+			creates a new journal entry from template name memo
 `, {
 	// input: ['setup', 'new'],
 	importMeta: import.meta,
 	flags: {
-		setup: {
-			type: 'boolean',
-			alias: 's'
+		dir: {
+			type: 'string',
+			alias: 'd'
 		},
 		template: {
 			type: 'string',
+			alias: 't',
 			default: 'memo'
 		}
 	}
 });
-
+console.log('cli.flags.template',cli.flags.template)
 const randomAwesomeShorts = [
 	"Ran a marathon",
 	"Had dinner with family",
@@ -63,8 +68,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function process(){
-	if(cli.flags.setup){
-		const journalPath = cli.input[0]
+	if(cli.flags.dir){
+		const journalPath = cli.flags.dir
 		if(!journalPath){
 			console.log('Please provide a valid path')
 			return
@@ -83,7 +88,7 @@ function process(){
 			console.log('Journal directory not available. Setup with `journal setup <path>`')
 			return
 		}
-		const title = cli.input.join(' ')
+		const title = cli?.input?.join(' ') || ''
 		const currentDate = new Date()
 		const template = journalTemplate(currentDate, title)
 		const journalEntryPath = path.join(journalDirectory, `journal-${currentDate.toDateString().split(' ').join('-')}.md`)
