@@ -3,8 +3,8 @@ import meow from 'meow';
 // import unicornFun from 'unicorn-fun';
 import fs from 'fs'
 import path from 'path'
-import { exec } from 'child_process';
 import { fileURLToPath } from 'url';
+import { openFile } from './crossPlatformFileOpener.js';
 
 const cli = meow(`
 	Usage
@@ -88,8 +88,7 @@ switch (cli.input[0]) {
 		const template = journalTemplate(currentDate)
 		const journalEntryPath = path.join(journalDirectory, `journal-${currentDate.toDateString().split(' ').join('-')}.md`)
 		fs.writeFileSync(journalEntryPath, template)
-		exec(path.join(__dirname, 'openCrossPlatform.sh') + " " + journalEntryPath)
+		openFile(journalEntryPath)
 		console.log('Journal set created at', journalEntryPath)
 		break
 }
-
