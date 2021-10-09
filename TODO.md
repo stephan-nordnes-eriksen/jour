@@ -1,1 +1,9 @@
-- [X] Do not overwrite existing journal entries
+- [X] Do not overwrite existing journal entry
+- [ ] template files (handlebar)
+- [ ] settings-file in folder
+- [ ] settings file with configs on templates and more.
+  - [ ] Template file setting
+- [ ] Possible git integration
+  - [ ] journal --save => git add . && git commit -m "journal saved"
+  - [ ] journal --upload => git push origin master
+  - [ ] journal --connect $1 => git origin add $1
