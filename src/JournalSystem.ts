@@ -5,11 +5,13 @@ import { JournalConfig } from './JournalConfig';
 import { journalTemplate } from './Template';
 import { openFile } from './crossPlatformFileOpener';
 
-
-
 export class JournalSystem {
+	constructor(private config: JournalConfig){
+
+	}
+
 	static NewJournalEntry(title: string) {
-		const journalDirectory = JournalConfig.getJournalPath()
+		const journalDirectory = JournalConfig.getCurrentJournalPath()
 		if(!journalDirectory || !fs.existsSync(journalDirectory)) {
 			console.log('Journal directory not available. Setup with `journal setup <path>`')
 			return
@@ -44,7 +46,19 @@ export class JournalSystem {
 		} else {
 			absoluteJournalPath = fs.realpathSync(absoluteJournalPath)
 		}
-		fs.writeFileSync(JournalConfig.getJournalSettingsPath(), absoluteJournalPath)
+		fs.writeFileSync(JournalConfig.getGlobalSettingsPath(), absoluteJournalPath)
 		console.log('Journal location saved to', absoluteJournalPath)
+	}
+
+	static InitializeGitStorage() {
+
+	}
+
+	static Save() {
+
+	}
+
+	static Upload() {
+
 	}
 }

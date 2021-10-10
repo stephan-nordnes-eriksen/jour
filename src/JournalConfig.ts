@@ -1,15 +1,58 @@
 import path from 'path'
-import fs from 'fs'
+import { FileSystem } from './FileSystem'
+
+
+let cachedJournalPath: string = ""
+let cachedJournalConfig: JournalConfig | undefined = undefined
+
+const defaultConfig: JournalConfig = {
+	path: '',
+	template: 'journal',
+	extraData: {},
+}
 
 export class JournalConfig {
-	static getJournalSettingsPath(){
+	constructor(
+		public path: string,
+		public template: string,
+		public extraData: {},
+		){}
+	static getGlobalSettingsPath(): string { // Should be private, but need it right now
 		return path.join(__dirname, 'journal.settings')
 	}
-	static getJournalPath() {
-		const settingsPath = JournalConfig.getJournalSettingsPath()
-		if(!fs.existsSync(settingsPath)){
-			return ""
+
+	static getCurrentJournalPath(): string {
+		if(cachedJournalPath) {
+			return cachedJournalPath
 		}
-		return fs.readFileSync(settingsPath).toString()
+		const settingsPath = JournalConfig.getGlobalSettingsPath()
+		cachedJournalPath = FileSystem.readFile(settingsPath)
+		return cachedJournalPath
+	}
+
+	private static getJournalConfigPath(){
+		return path.join(JournalConfig.getCurrentJournalPath(), 'journal.json')
+	}
+
+	static getJournalConfig(): JournalConfig {
+		if(cachedJournalConfig){
+			return cachedJournalConfig
+		}
+		const configPath = JournalConfig.getJournalConfigPath()
+		cachedJournalConfig = this.loadConfigFile(configPath)
+		return cachedJournalConfig
+	}
+	private static loadConfigFile(path: string): JournalConfig {
+		try {
+			const jsonConfig = JSON.parse(FileSystem.readFile(path))
+			return new JournalConfig(
+				jsonConfig?.path || defaultConfig.path,
+				jsonConfig?.template || defaultConfig.template,
+				jsonConfig?.extraData || defaultConfig.extraData
+			)
+		} catch (error) {
+			console.error('Error reading config file. Using default', error)
+			return defaultConfig
+		}
 	}
 }
