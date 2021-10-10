@@ -3,3 +3,6 @@ yarn.lock
 test-journal
 .DS_Store
 journal.settings
+dist
+test-journal-*
+coverage
