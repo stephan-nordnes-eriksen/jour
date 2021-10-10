@@ -9,18 +9,30 @@
 		"email": "stephanruler@gmail.com",
 		"url": "https://snestudio.com"
 	},
-	"type": "module",
 	"bin": {
-		"journal": "cli.js"
+		"journal": "dist/cli.js"
 	},
 	"engines": {
 		"node": ">=12"
 	},
 	"scripts": {
-		"test": "xo && ava"
+		"build": "tsc; chmod +x dist/cli.js",
+		"lint-fix": "eslint --fix",
+		"copy-static-assets": "ts-node copyStaticAssets.ts",
+		"debug": "npm run build && npm run watch-debug",
+		"lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
+		"serve-debug": "nodemon --inspect dist/server.js",
+		"serve": "node dist/server.js",
+		"start": "npm run serve",
+		"test": "jest --forceExit --coverage --verbose",
+		"watch-debug": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run serve-debug\"",
+		"watch-node": "nodemon dist/server.js",
+		"watch-sass": "sass --watch src/public/css/main.scss dist/public/css/main.css",
+		"watch-test": "npm run test -- --watchAll",
+		"watch-ts": "tsc -w"
 	},
 	"files": [
-		"cli.js"
+		"dist/cli.js"
 	],
 	"keywords": [
 		"cli",
@@ -29,12 +41,20 @@
 		"fun"
 	],
 	"dependencies": {
-		"meow": "^10.1.1",
-		"unicorn-fun": "^0.0.0"
+		"commander": "^8.2.0",
+		"handlebars": "^4.7.7",
+		"meow": "^10.1.1"
 	},
 	"devDependencies": {
+		"@types/jest": "^27.0.2",
+		"@typescript-eslint/eslint-plugin": "^4.33.0",
+		"@typescript-eslint/parser": "^4.33.0",
 		"ava": "^3.15.0",
+		"eslint": "^7.32.0",
 		"execa": "^5.0.0",
+		"jest": "^27.2.5",
+		"ts-jest": "^27.0.5",
+		"typescript": "^4.4.3",
 		"xo": "^0.37.0"
 	}
 }
