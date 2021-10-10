@@ -1,19 +1,22 @@
 import path from 'path'
 import fs from 'fs'
-import { fileURLToPath } from 'url';
-import { JournalConfig } from './JournalConfig';
-import { journalTemplate } from './Template';
-import { openFile } from './crossPlatformFileOpener';
+import { JournalConfig } from './JournalConfig'
+import { journalTemplate } from './Template'
+import { openFile } from './crossPlatformFileOpener'
+import { FileSystem } from './FileSystem'
+
+import { Logger } from './Logger'
 
 export class JournalSystem {
-	constructor(private config: JournalConfig){
+	constructor(private config: JournalConfig, private LOG: Logger){
 
 	}
 
-	static NewJournalEntry(title: string) {
+	NewJournalEntry(title: string) {
+		// ...
 		const journalDirectory = JournalConfig.getCurrentJournalPath()
 		if(!journalDirectory || !fs.existsSync(journalDirectory)) {
-			console.log('Journal directory not available. Setup with `journal setup <path>`')
+			this.LOG.info('Journal directory not available. Setup with `journal setup <path>`')
 			return
 		}
 		// const title = cli?.input?.join(' ') || ''
@@ -30,35 +33,45 @@ export class JournalSystem {
 		}
 		fs.writeFileSync(journalEntryPath, template)
 		openFile(journalEntryPath)
-		console.log('Journal set created at', journalEntryPath)
+		this.LOG.debug('Journal set created at', journalEntryPath)
 	}
-	static Directory(journalPath?: string) {
+	Directory(journalPath?: string) {
 		// const journalPath = programOptions.dir
 		if(!journalPath){
-			console.log('Please provide a valid path')
+			this.LOG.info('Please provide a valid path')
 			return
 		}
 		let absoluteJournalPath = journalPath
 		if(!fs.existsSync(journalPath)){
 			// absoluteJournalPath = fileURLToPath(path.join(process.cwd(), journalPath))
-			console.log('Directory does not exist')
+			this.LOG.info('Directory does not exist')
 			return
 		} else {
 			absoluteJournalPath = fs.realpathSync(absoluteJournalPath)
 		}
-		fs.writeFileSync(JournalConfig.getGlobalSettingsPath(), absoluteJournalPath)
-		console.log('Journal location saved to', absoluteJournalPath)
+		this.LOG.debug('JournalConfig.getGlobalSettingsPath()', JournalConfig.getGlobalSettingsPath())
+		this.LOG.debug('absoluteJournalPath', absoluteJournalPath)
+		this.LOG.debug('JournalConfig.getGlobalSettingsPath()', JournalConfig.getGlobalSettingsPath())
+		FileSystem.writeFile(JournalConfig.getGlobalSettingsPath(), absoluteJournalPath)
+		this.LOG.info('Journal location saved to', absoluteJournalPath)
 	}
 
-	static InitializeGitStorage() {
+	Template(dir: any) {
+		throw new Error('Method not implemented.');
+	}
+	Config(dir: any) {
+		throw new Error('Method not implemented.');
+	}
+
+	InitializeGitStorage() {
 
 	}
 
-	static Save() {
+	Save() {
 
 	}
 
-	static Upload() {
+	Upload() {
 
 	}
 }

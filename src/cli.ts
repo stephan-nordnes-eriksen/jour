@@ -1,27 +1,22 @@
 #!/usr/bin/env node
-// import meow from 'meow';
 import { Command } from 'commander'
 
-// import unicornFun from 'unicorn-fun';
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url';
-import { openFile } from './crossPlatformFileOpener.js'
-import { JournalConfig } from './JournalConfig.js';
-import { JournalSystem } from './JournalSystem.js';
-import { Template, TemplateData } from './Template.js'
+import { JournalConfig } from './JournalConfig.js'
+import { JournalSystem } from './JournalSystem.js'
+import { Logger } from './Logger.js'
 
 
-const program = new Command();
-program
+const program = new Command()
 //.argument('<words...>') // This seems suboptimal
+program
 .option('-d, --dir <directory>', 'Setup journal directory')
 .option('-c, --config <configuration-file>', 'Set configuratoin file')
 .option('-t, --template <template-name>', 'which template to use', 'memo')
 .option('-igs, --initializeGitStorage <git-repo-url>', 'Initialize git storage solution on current journal directory')
 .option('-s, --save', 'save all modified journals with provided storage solution')
 .option('-u, --upload', 'Upload saved journal entries to provided storage solution')
-.option('--delete', 'Upload saved journal entries to provided')
+.option('-v, --verbose', 'Print verbose debug logging')
+.option('--delete', 'Delete something? Not sure')
 .addHelpText('after', `
 Examples:
 $ journal --dir ./my/desired/journal/directory
@@ -39,43 +34,49 @@ $ journal --config <path-to-config-file>
 `)
 .action(() => {
 	// program.parse(process.argv)
-	console.log('program.args', program.args)
-	const programOptions = program.opts();
+	const programOptions = program.opts()
 	// if(programOptions.dir) {
 	// 	return
 	// }
+	const config = JournalConfig.getJournalConfig()
+	const LOG = new Logger(!!programOptions.verbose)
+	const journal = new JournalSystem(config, LOG)
+	LOG.debug('program.args', program.args)
 
 	switch (true) {
 		case !!programOptions.dir:
-			console.log('Running dir')
-			JournalSystem.Directory(programOptions.dir)
-			break;
+			LOG.debug('Running dir')
+			journal.Directory(programOptions.dir)
+			break
 		case !!programOptions.config:
-			// JournalSystem.Directory(programOptions.dir)
-			console.log('Running config')
-			break;
+			LOG.debug('Running config')
+			journal.Config(programOptions.config)
+			break
 		case !!programOptions.template:
-			// JournalSystem.Directory(programOptions.dir)
-			console.log('Running template')
-			break;
+			LOG.debug('Running template')
+			journal.Template(programOptions.dir)
+			break
 		case !!programOptions.initializeGitStorage:
-			JournalSystem.InitializeGitStorage()
-			console.log('Running initializeGitStorage')
-			break;
+			LOG.debug('Running initializeGitStorage')
+			journal.InitializeGitStorage()
+			break
 		case !!programOptions.save:
-			JournalSystem.Save()
-			console.log('Running save')
-			break;
+			LOG.debug('Running save')
+			journal.Save()
+			break
 		case !!programOptions.upload:
-			JournalSystem.Upload()
-			console.log('Running upload')
-			break;
+			LOG.debug('Running upload')
+			journal.Upload()
+			break
+		case !!programOptions.delete:
+			LOG.debug('Running upload')
+			journal.Upload()
+			break
+
 		default:
-			console.log('Running default')
-			console.log('programOptions', programOptions)
-			JournalSystem.NewJournalEntry(program?.args?.join(' ') || '')
-			break;
+			LOG.debug('Running default')
+			LOG.debug('programOptions', programOptions)
+			journal.NewJournalEntry(program?.args?.join(' ') || '')
+			break
 	}
 }).parse(process.argv)
-
-console.log('hello')

@@ -16,9 +16,10 @@ export class JournalConfig {
 		public path: string,
 		public template: string,
 		public extraData: {},
-		){}
+	){}
+
 	static getGlobalSettingsPath(): string { // Should be private, but need it right now
-		return path.join(__dirname, 'journal.settings')
+		return path.resolve(path.join(__dirname, '..', 'journal.settings'))
 	}
 
 	static getCurrentJournalPath(): string {
@@ -51,7 +52,9 @@ export class JournalConfig {
 				jsonConfig?.extraData || defaultConfig.extraData
 			)
 		} catch (error) {
-			console.error('Error reading config file. Using default', error)
+			if(error.message !== 'Unexpected end of JSON input'){
+				console.error('Error reading config file. Using default', error)
+			}
 			return defaultConfig
 		}
 	}
