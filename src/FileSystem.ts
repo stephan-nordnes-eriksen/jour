@@ -1,6 +1,9 @@
 import fs from 'fs'
 
 export class FileSystem {
+	static writeFile(path: string, absoluteJournalPath: string) {
+		fs.writeFileSync(path, absoluteJournalPath)
+	}
 	static pathExists(path: string): boolean {
 		return fs.existsSync(path)
 	}
