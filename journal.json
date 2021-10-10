@@ -1,0 +1,7 @@
+{
+	"template": "memo",
+	"extra": {
+		"custom": "data",
+		"purpose": "can be used in custom templates"
+	}
+}

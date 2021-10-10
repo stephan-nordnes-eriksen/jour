@@ -7,4 +7,5 @@
   - [ ] journal --save => git add . && git commit -m "journal saved"
   - [ ] journal --upload => git push origin master
   - [ ] journal --connect $1 => git origin add $1
-- [x] typescript
+- [X] typescript
+- [ ] read config file in path, or default file
