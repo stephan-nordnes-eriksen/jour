@@ -57,11 +57,12 @@ export class JournalSystem {
 	}
 
 	Template(dir: any) {
-		throw new Error('Method not implemented.');
+		// throw new Error('Method not implemented.');
+		// Not sure what this is supposed to do.
+		const pj = require('../package.json')
 	}
-	Config(dir: any) {
-		throw new Error('Method not implemented.');
-	}
+	// Config(configFilePath: string) {
+	// }
 
 	InitializeGitStorage() {
 
@@ -73,5 +74,17 @@ export class JournalSystem {
 
 	Upload() {
 
+	}
+
+	Info() {
+		this.Version()
+		this.LOG.info('Current Journal ', this.config.path)
+		this.LOG.info('Template        ', this.config.template)
+		this.LOG.info('Extra data      ', this.config.extraData)
+		// this.LOG.info('config:         ', this.config)
+	}
+	Version() {
+		const pj = require('../package.json')
+		this.LOG.info('Journal CLI version', pj.version)
 	}
 }

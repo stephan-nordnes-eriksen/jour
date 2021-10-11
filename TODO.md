@@ -8,4 +8,5 @@
   - [ ] journal --upload => git push origin master
   - [ ] journal --connect $1 => git origin add $1
 - [X] typescript
-- [ ] read config file in path, or default file
+- [X] read config file in path, or default file
+- [X] Print current config with --info

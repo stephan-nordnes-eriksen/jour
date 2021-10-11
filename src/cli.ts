@@ -10,13 +10,15 @@ const program = new Command()
 //.argument('<words...>') // This seems suboptimal
 program
 .option('-d, --dir <directory>', 'Setup journal directory')
-.option('-c, --config <configuration-file>', 'Set configuratoin file')
-.option('-t, --template <template-name>', 'which template to use', 'memo')
+.option('-i, --info', 'Display information about current journal')
+.option('--version', 'Display version info')
+// .option('-c, --config <configuration-file>', 'Set configuration file') // I think this is simply implicit from the journal path
 .option('-igs, --initializeGitStorage <git-repo-url>', 'Initialize git storage solution on current journal directory')
 .option('-s, --save', 'save all modified journals with provided storage solution')
 .option('-u, --upload', 'Upload saved journal entries to provided storage solution')
 .option('-v, --verbose', 'Print verbose debug logging')
 .option('--delete', 'Delete something? Not sure')
+.option('-t, --template <template-name>', 'which template to use', 'memo')
 .addHelpText('after', `
 Examples:
 $ journal --dir ./my/desired/journal/directory
@@ -42,20 +44,20 @@ $ journal --config <path-to-config-file>
 	const LOG = new Logger(!!programOptions.verbose)
 	const journal = new JournalSystem(config, LOG)
 	LOG.debug('program.args', program.args)
-
 	switch (true) {
 		case !!programOptions.dir:
 			LOG.debug('Running dir')
 			journal.Directory(programOptions.dir)
 			break
-		case !!programOptions.config:
-			LOG.debug('Running config')
-			journal.Config(programOptions.config)
-			break
-		case !!programOptions.template:
-			LOG.debug('Running template')
-			journal.Template(programOptions.dir)
-			break
+		// case !!programOptions.config: // Going to remove this probably, as it is fully implicit
+		// 	LOG.debug('Running config')
+		// 	journal.Config(programOptions.config)
+		// 	break
+		// template is a setting, not a something else
+		// case !!programOptions.template:
+		// 	LOG.debug('Running template')
+		// 	journal.Template(programOptions.dir)
+		// 	break
 		case !!programOptions.initializeGitStorage:
 			LOG.debug('Running initializeGitStorage')
 			journal.InitializeGitStorage()
@@ -72,7 +74,14 @@ $ journal --config <path-to-config-file>
 			LOG.debug('Running upload')
 			journal.Upload()
 			break
-
+		case !!programOptions.info:
+			LOG.debug('Running info')
+			journal.Info()
+			break
+		case !!programOptions.version:
+			LOG.debug('Running version')
+			journal.Version()
+			break
 		default:
 			LOG.debug('Running default')
 			LOG.debug('programOptions', programOptions)
@@ -80,3 +89,5 @@ $ journal --config <path-to-config-file>
 			break
 	}
 }).parse(process.argv)
+// console.log('Done loading')
+// console.info('Done loading i')

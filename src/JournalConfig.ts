@@ -36,18 +36,20 @@ export class JournalConfig {
 	}
 
 	static getJournalConfig(): JournalConfig {
-		if(cachedJournalConfig){
+		if(cachedJournalConfig) {
 			return cachedJournalConfig
 		}
 		const configPath = JournalConfig.getJournalConfigPath()
 		cachedJournalConfig = this.loadConfigFile(configPath)
+		cachedJournalConfig.path = JournalConfig.getCurrentJournalPath()
 		return cachedJournalConfig
 	}
-	private static loadConfigFile(path: string): JournalConfig {
+	private static loadConfigFile(configPath: string): JournalConfig {
 		try {
-			const jsonConfig = JSON.parse(FileSystem.readFile(path))
+			const jsonConfig = JSON.parse(FileSystem.readFile(configPath))
+
 			return new JournalConfig(
-				jsonConfig?.path || defaultConfig.path,
+				JournalConfig.getCurrentJournalPath(),
 				jsonConfig?.template || defaultConfig.template,
 				jsonConfig?.extraData || defaultConfig.extraData
 			)
