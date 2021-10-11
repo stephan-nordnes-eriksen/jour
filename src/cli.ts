@@ -18,7 +18,7 @@ program
 .option('-u, --upload', 'Upload saved journal entries to provided storage solution')
 .option('-v, --verbose', 'Print verbose debug logging')
 .option('--delete', 'Delete something? Not sure')
-.option('-t, --template <template-name>', 'which template to use', 'memo')
+.option('-t, --template <template-name>', 'Set which template to use. Name, or path to template')
 .addHelpText('after', `
 Examples:
 $ journal --dir ./my/desired/journal/directory
@@ -54,10 +54,10 @@ $ journal --config <path-to-config-file>
 		// 	journal.Config(programOptions.config)
 		// 	break
 		// template is a setting, not a something else
-		// case !!programOptions.template:
-		// 	LOG.debug('Running template')
-		// 	journal.Template(programOptions.dir)
-		// 	break
+		case !!programOptions.template:
+			LOG.debug('Running template')
+			journal.Template(programOptions.template)
+			break
 		case !!programOptions.initializeGitStorage:
 			LOG.debug('Running initializeGitStorage')
 			journal.InitializeGitStorage()
@@ -89,5 +89,3 @@ $ journal --config <path-to-config-file>
 			break
 	}
 }).parse(process.argv)
-// console.log('Done loading')
-// console.info('Done loading i')
