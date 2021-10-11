@@ -1,7 +1,7 @@
 - [X] Do not overwrite existing journal entry
-- [ ] template files (handlebar)
-- [ ] settings-file in folder
-- [ ] settings file with configs on templates and more.
+- [X] template files (handlebar)
+- [X] settings-file in folder
+- [X] settings file with configs on templates and more.
   - [ ] Template file setting
 - [ ] Possible git integration
   - [ ] journal --save => git add . && git commit -m "journal saved"
@@ -10,3 +10,4 @@
 - [X] typescript
 - [X] read config file in path, or default file
 - [X] Print current config with --info
+- [ ] Update template saves relative path, not absolute

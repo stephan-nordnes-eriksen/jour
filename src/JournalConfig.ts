@@ -5,12 +5,6 @@ import { FileSystem } from './FileSystem'
 let cachedJournalPath: string = ""
 let cachedJournalConfig: JournalConfig | undefined = undefined
 
-const defaultConfig: JournalConfig = {
-	path: '',
-	template: 'journal',
-	extraData: {},
-}
-
 export class JournalConfig {
 	constructor(
 		public path: string,
@@ -18,6 +12,22 @@ export class JournalConfig {
 		public extraData: {},
 	){}
 
+	updateTemplate(template: string) {
+		this.template = template
+		return this.save()
+	}
+	updateExtraData(extraData: any){
+		this.extraData = extraData
+		return this.save()
+	}
+	save() {
+		const configPath = JournalConfig.getJournalConfigPath()
+		const fullConfigContent = JSON.parse(FileSystem.readFile(configPath) || "{}")
+		fullConfigContent.template = this.template
+		fullConfigContent.extraData = this.extraData
+		FileSystem.writeFile(configPath, JSON.stringify(fullConfigContent))
+		return true
+	}
 	static getGlobalSettingsPath(): string { // Should be private, but need it right now
 		return path.resolve(path.join(__dirname, '..', 'journal.settings'))
 	}
@@ -39,13 +49,13 @@ export class JournalConfig {
 		if(cachedJournalConfig) {
 			return cachedJournalConfig
 		}
-		const configPath = JournalConfig.getJournalConfigPath()
-		cachedJournalConfig = this.loadConfigFile(configPath)
+		cachedJournalConfig = this.loadConfigFile()
 		cachedJournalConfig.path = JournalConfig.getCurrentJournalPath()
 		return cachedJournalConfig
 	}
-	private static loadConfigFile(configPath: string): JournalConfig {
+	private static loadConfigFile(): JournalConfig {
 		try {
+			const configPath = JournalConfig.getJournalConfigPath()
 			const jsonConfig = JSON.parse(FileSystem.readFile(configPath))
 
 			return new JournalConfig(
@@ -61,3 +71,5 @@ export class JournalConfig {
 		}
 	}
 }
+
+const defaultConfig: JournalConfig = new JournalConfig('', 'journal', {})

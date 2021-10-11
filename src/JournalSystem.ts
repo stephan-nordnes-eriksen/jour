@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import { JournalConfig } from './JournalConfig'
-import { journalTemplate } from './Template'
+import { journalTemplate, Template } from './Template'
 import { openFile } from './crossPlatformFileOpener'
 import { FileSystem } from './FileSystem'
 
@@ -56,10 +56,20 @@ export class JournalSystem {
 		this.LOG.info('Journal location saved to', absoluteJournalPath)
 	}
 
-	Template(dir: any) {
-		// throw new Error('Method not implemented.');
-		// Not sure what this is supposed to do.
-		const pj = require('../package.json')
+	Template(template: string) {
+		const templatePath = Template.toPath(template)
+		if (!Template.isValidTemplateLocation(templatePath)){
+			this.LOG.error('Invalid template name or path')
+			return
+		}
+		if (!Template.isValidTemplate(templatePath)){
+			this.LOG.error('Invalid template format')
+			this.LOG.error('Journal uses handlebars. Read about it here https://handlebarsjs.com')
+			return
+		}
+		if(this.config.updateTemplate(template)){
+			this.LOG.info('Template updated to', this.config.template)
+		}
 	}
 	// Config(configFilePath: string) {
 	// }
