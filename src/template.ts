@@ -1,5 +1,4 @@
 import Handlebars from 'handlebars'
-import fs from 'fs'
 import path from 'path'
 import { FileSystem } from './FileSystem'
 

@@ -1,5 +1,4 @@
 import path from 'path'
-import fs from 'fs'
 import { JournalConfig } from './JournalConfig'
 import { journalTemplate, Template } from './Template'
 import { openFile } from './crossPlatformFileOpener'
@@ -15,8 +14,8 @@ export class JournalSystem {
 	NewJournalEntry(title: string) {
 		// ...
 		const journalDirectory = JournalConfig.getCurrentJournalPath()
-		if(!journalDirectory || !fs.existsSync(journalDirectory)) {
-			this.LOG.info('Journal directory not available. Setup with `journal setup <path>`')
+		if(!journalDirectory || !FileSystem.isDirectory(journalDirectory)) {
+			this.LOG.info('Journal directory not available. Setup with `journal --dir <path>`')
 			return
 		}
 		// const title = cli?.input?.join(' ') || ''
@@ -28,10 +27,10 @@ export class JournalSystem {
 			return
 		}
 		let journalEntryPath = path.join(journalDirectory, `journal-${currentDate.toDateString().split(' ').join('-')}.md`)
-		if(fs.existsSync(journalEntryPath)){
+		if(FileSystem.isFile(journalEntryPath)){
 			journalEntryPath = journalEntryPath.slice(0, -3) + '-' + currentDate.getTime() + '.md'
 		}
-		fs.writeFileSync(journalEntryPath, template)
+		FileSystem.writeFile(journalEntryPath, template)
 		openFile(journalEntryPath)
 		this.LOG.debug('Journal set created at', journalEntryPath)
 	}
@@ -42,17 +41,17 @@ export class JournalSystem {
 			return
 		}
 		let absoluteJournalPath = journalPath
-		if(!fs.existsSync(journalPath)){
+		if(!FileSystem.isDirectory(journalPath)){
 			// absoluteJournalPath = fileURLToPath(path.join(process.cwd(), journalPath))
 			this.LOG.info('Directory does not exist')
 			return
 		} else {
-			absoluteJournalPath = fs.realpathSync(absoluteJournalPath)
+			absoluteJournalPath = FileSystem.getRealPath(absoluteJournalPath)
 		}
 		this.LOG.debug('JournalConfig.getGlobalSettingsPath()', JournalConfig.getGlobalSettingsPath())
 		this.LOG.debug('absoluteJournalPath', absoluteJournalPath)
 		this.LOG.debug('JournalConfig.getGlobalSettingsPath()', JournalConfig.getGlobalSettingsPath())
-		FileSystem.writeFile(JournalConfig.getGlobalSettingsPath(), absoluteJournalPath)
+		FileSystem.writeFile(JournalConfig.getGlobalSettingsPath(), absoluteJournalPath, true)
 		this.LOG.info('Journal location saved to', absoluteJournalPath)
 	}
 
@@ -74,7 +73,7 @@ export class JournalSystem {
 	// Config(configFilePath: string) {
 	// }
 
-	InitializeGitStorage() {
+	ConnectGitStorage() {
 
 	}
 

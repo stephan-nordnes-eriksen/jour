@@ -25,7 +25,7 @@ export class JournalConfig {
 		const fullConfigContent = JSON.parse(FileSystem.readFile(configPath) || "{}")
 		fullConfigContent.template = this.template
 		fullConfigContent.extraData = this.extraData
-		FileSystem.writeFile(configPath, JSON.stringify(fullConfigContent))
+		FileSystem.writeFile(configPath, JSON.stringify(fullConfigContent), true)
 		return true
 	}
 	static getGlobalSettingsPath(): string { // Should be private, but need it right now
