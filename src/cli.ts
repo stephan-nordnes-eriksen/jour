@@ -13,7 +13,7 @@ program
 .option('-i, --info', 'Display information about current journal')
 .option('--version', 'Display version info')
 // .option('-c, --config <configuration-file>', 'Set configuration file') // I think this is simply implicit from the journal path
-.option('-igs, --initializeGitStorage <git-repo-url>', 'Initialize git storage solution on current journal directory')
+.option('-c, --connect <git-repo-url>', 'Connect to git storage solution on current journal directory')
 .option('-s, --save', 'save all modified journals with provided storage solution')
 .option('-u, --upload', 'Upload saved journal entries to provided storage solution')
 .option('-v, --verbose', 'Print verbose debug logging')
@@ -30,7 +30,7 @@ $ journal This is my journal title entry
 $ journal --template=memo Todays Title
 	creates a new journal entry from template name memo
 $ journal --template-path <path-to-template-folder>
-	Set your desired template folder
+	Set your desired template
 $ journal --config <path-to-config-file>
 	Set your desired config file.
 `)
@@ -58,9 +58,9 @@ $ journal --config <path-to-config-file>
 			LOG.debug('Running template')
 			journal.Template(programOptions.template)
 			break
-		case !!programOptions.initializeGitStorage:
-			LOG.debug('Running initializeGitStorage')
-			journal.InitializeGitStorage()
+		case !!programOptions.connect:
+			LOG.debug('Running connect')
+			journal.ConnectGitStorage()
 			break
 		case !!programOptions.save:
 			LOG.debug('Running save')

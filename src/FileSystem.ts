@@ -1,8 +1,13 @@
 import fs from 'fs'
 
 export class FileSystem {
-	static writeFile(path: string, absoluteJournalPath: string) {
-		fs.writeFileSync(path, absoluteJournalPath)
+	static getRealPath(path: string): string {
+		return fs.realpathSync(path)
+	}
+	static writeFile(path: string, absoluteJournalPath: string, overwrite = false) {
+		if(overwrite || !FileSystem.isFile(path)){
+			fs.writeFileSync(path, absoluteJournalPath)
+		}
 	}
 	static pathExists(path: string): boolean {
 		return fs.existsSync(path)
