@@ -13,7 +13,7 @@ program
 .option('-i, --info', 'Display information about current journal')
 .option('--version', 'Display version info')
 // .option('-c, --config <configuration-file>', 'Set configuration file') // I think this is simply implicit from the journal path
-.option('-c, --connect <git-repo-url>', 'Connect to git storage solution on current journal directory')
+.option('-c, --connect <git-repo-url>', 'Connect to git storage solution on current journal directory.')
 .option('-s, --save', 'save all modified journals with provided storage solution')
 .option('-u, --upload', 'Upload saved journal entries to provided storage solution')
 .option('-v, --verbose', 'Print verbose debug logging')
@@ -60,7 +60,7 @@ $ journal --config <path-to-config-file>
 			break
 		case !!programOptions.connect:
 			LOG.debug('Running connect')
-			journal.ConnectGitStorage()
+			journal.ConnectGitStorage(programOptions.connect)
 			break
 		case !!programOptions.save:
 			LOG.debug('Running save')

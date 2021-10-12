@@ -5,6 +5,7 @@ import { openFile } from './crossPlatformFileOpener'
 import { FileSystem } from './FileSystem'
 
 import { Logger } from './Logger'
+import { GitHandler } from './gitHandler'
 
 export class JournalSystem {
 	constructor(private config: JournalConfig, private LOG: Logger){
@@ -73,16 +74,22 @@ export class JournalSystem {
 	// Config(configFilePath: string) {
 	// }
 
-	ConnectGitStorage() {
-
+	ConnectGitStorage(gitRemote: string) {
+		const journalPath = JournalConfig.getCurrentJournalPath()
+		GitHandler.init(journalPath, gitRemote)
+		this.LOG.info('Git connected in', journalPath)
 	}
 
 	Save() {
-
+		const journalPath = JournalConfig.getCurrentJournalPath()
+		GitHandler.save(journalPath)
+		this.LOG.info('Saved in git', journalPath)
 	}
 
 	Upload() {
-
+		const journalPath = JournalConfig.getCurrentJournalPath()
+		GitHandler.upload(journalPath)
+		this.LOG.info('Uploaded in git', journalPath)
 	}
 
 	Info() {
