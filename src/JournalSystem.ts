@@ -141,6 +141,21 @@ export class JournalSystem {
 		this.LOG.info('Code available at')
 		this.LOG.info('https://github.com/' + pj.repository)
 		this.LOG.info('   give it a <3 !')
+		this.LOG.info('')
 
+		this.printLogo("Journal CLI - Simply write")
+	}
+
+	async printLogo(inputText: string, progress = 1) {
+		if(progress > inputText.length){
+			this.LOG.info('')
+			return
+		}
+		process.stdout.clearLine(1)
+		process.stdout.cursorTo(0)
+		process.stdout.write(inputText.slice(0, progress))
+		setTimeout(() => {
+			this.printLogo(inputText, progress + 1)
+		}, 50 + Math.random()*100)
 	}
 }
