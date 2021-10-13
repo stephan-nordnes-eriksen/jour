@@ -6,9 +6,10 @@ import { FileSystem } from './FileSystem'
 
 import { Logger } from './Logger'
 import { GitHandler } from './gitHandler'
+import { JournalError } from './JournalError'
 
 export class JournalSystem {
-	constructor(private config: JournalConfig, private LOG: Logger){
+	constructor(private config: JournalConfig, public LOG: Logger){
 
 	}
 
@@ -16,16 +17,15 @@ export class JournalSystem {
 		// ...
 		const journalDirectory = JournalConfig.getCurrentJournalPath()
 		if(!journalDirectory || !FileSystem.isDirectory(journalDirectory)) {
-			this.LOG.info('Journal directory not available. Setup with `journal --dir <path>`')
-			return
+			throw new JournalError('Journal directory not available. Setup with `journal --dir <path>`')
 		}
 		// const title = cli?.input?.join(' ') || ''
 
 
 		const currentDate = new Date()
-		const template = journalTemplate(currentDate, title)
+		const template = journalTemplate(this.config, title)
 		if(!template){
-			return
+			throw new JournalError("No template found.")
 		}
 		let journalEntryPath = path.join(journalDirectory, `journal-${currentDate.toDateString().split(' ').join('-')}.md`)
 		if(FileSystem.isFile(journalEntryPath)){
@@ -38,14 +38,12 @@ export class JournalSystem {
 	Directory(journalPath?: string) {
 		// const journalPath = programOptions.dir
 		if(!journalPath){
-			this.LOG.info('Please provide a valid path')
-			return
+			throw new JournalError('Please provide a valid path')
 		}
 		let absoluteJournalPath = journalPath
 		if(!FileSystem.isDirectory(journalPath)){
 			// absoluteJournalPath = fileURLToPath(path.join(process.cwd(), journalPath))
-			this.LOG.info('Directory does not exist')
-			return
+			throw new JournalError('Directory does not exist')
 		} else {
 			absoluteJournalPath = FileSystem.getRealPath(absoluteJournalPath)
 		}
@@ -59,36 +57,38 @@ export class JournalSystem {
 	Template(template: string) {
 		const templatePath = Template.toPath(template)
 		if (!Template.isValidTemplateLocation(templatePath)){
-			this.LOG.error('Invalid template name or path')
-			return
+			throw new JournalError('Invalid template name or path')
 		}
 		if (!Template.isValidTemplate(templatePath)){
-			this.LOG.error('Invalid template format')
-			this.LOG.error('Journal uses handlebars. Read about it here https://handlebarsjs.com')
-			return
+			throw new JournalError('Invalid template format\n\nJournal uses handlebars. Read about it here https://handlebarsjs.com')
 		}
 		if(this.config.updateTemplate(template)){
 			this.LOG.info('Template updated to', this.config.template)
+		} else {
+			throw new JournalError("Unable to save template change.")
 		}
 	}
 	// Config(configFilePath: string) {
 	// }
 
-	ConnectGitStorage(gitRemote: string) {
+	ConnectGitStorage(gitRemote?: string | boolean) {
 		const journalPath = JournalConfig.getCurrentJournalPath()
-		GitHandler.init(journalPath, gitRemote)
+		if (typeof(gitRemote) === 'boolean'){
+			gitRemote = ""
+		}
+		GitHandler.init(this, journalPath, gitRemote)
 		this.LOG.info('Git connected in', journalPath)
 	}
 
 	Save() {
 		const journalPath = JournalConfig.getCurrentJournalPath()
-		GitHandler.save(journalPath)
+		GitHandler.save(this, journalPath)
 		this.LOG.info('Saved in git', journalPath)
 	}
 
 	Upload() {
 		const journalPath = JournalConfig.getCurrentJournalPath()
-		GitHandler.upload(journalPath)
+		GitHandler.upload(this, journalPath)
 		this.LOG.info('Uploaded in git', journalPath)
 	}
 
@@ -102,5 +102,14 @@ export class JournalSystem {
 	Version() {
 		const pj = require('../package.json')
 		this.LOG.info('Journal CLI version', pj.version)
+	}
+	Open() {
+		const journalPath = JournalConfig.getCurrentJournalPath()
+		FileSystem.Open(journalPath)
+	}
+	Locale(locale: string) {
+		// todo; but set locale in config
+		if(this.config.updateLocale(locale)){
+		}
 	}
 }

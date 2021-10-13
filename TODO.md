@@ -11,3 +11,9 @@
 - [X] read config file in path, or default file
 - [X] Print current config with --info
 - [ ] Update template saves relative path, not absolute
+- [ ] Locale for time string
+- [X] Pretty json in config file
+- [ ] standard-version
+- [ ] github actions for builds and test
+- [X] Better control flow with throws and custom error type
+
