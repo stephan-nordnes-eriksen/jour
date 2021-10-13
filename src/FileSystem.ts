@@ -5,7 +5,7 @@ export class FileSystem {
 		return fs.realpathSync(path)
 	}
 	static writeFile(path: string, absoluteJournalPath: string, overwrite = false) {
-		if(overwrite || !FileSystem.isFile(path)){
+		if (overwrite || !FileSystem.isFile(path)) {
 			fs.writeFileSync(path, absoluteJournalPath)
 		}
 	}
@@ -33,6 +33,6 @@ export class FileSystem {
 				return execSync('start ' + path)
 			default:
 				return execSync('xdg-open ' + path)
-		 }
+		}
 	}
 }

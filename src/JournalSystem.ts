@@ -140,10 +140,10 @@ export class JournalSystem {
 		this.LOG.info('')
 		this.LOG.info('Code available at')
 		this.LOG.info('https://github.com/' + pj.repository)
-		this.LOG.info('   give it a <3 !')
+		this.LOG.info('   Give it a ⭐ if you like it!')
 		this.LOG.info('')
 
-		this.printLogo("Journal CLI - Simply write")
+		this.printLogo("Journal CLI - Simply write 📔")
 	}
 
 	async printLogo(inputText: string, progress = 1) {

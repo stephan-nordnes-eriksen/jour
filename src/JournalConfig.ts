@@ -2,14 +2,14 @@ import path from 'path'
 import { FileSystem } from './FileSystem'
 
 
-let cachedJournalPath: string = ""
+let cachedJournalPath = ""
 let cachedJournalConfig: JournalConfig | undefined = undefined
 
 export class JournalConfig {
 	constructor(
 		public path: string,
 		public template: string,
-		public extraData: {},
+		public extraData: Record<string, unknown>,
 		public currentTime: Date = new Date(),
 		public locale: string = Intl.DateTimeFormat().resolvedOptions().locale,
 	){}
