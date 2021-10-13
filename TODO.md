@@ -19,3 +19,6 @@
 - [ ] Add git-info to the --info command
 - [ ] add more to help-text
 - [X] Add about command
+- [X] Possibly make the empty journal command, eg `$ journal` open todays journal. Even the non-empty command could append to todays journal, and open.
+- [ ] Consider having the non-empty journal command append to existing journal entry
+- [ ] -n, --new => Force new template even if existing.

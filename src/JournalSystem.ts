@@ -9,7 +9,7 @@ import { GitHandler } from './gitHandler'
 import { JournalError } from './JournalError'
 
 export class JournalSystem {
-	constructor(private config: JournalConfig, public LOG: Logger) {
+	constructor(public config: JournalConfig, public LOG: Logger) {
 
 	}
 
@@ -23,17 +23,22 @@ export class JournalSystem {
 
 
 		const currentDate = new Date()
-		const template = journalTemplate(this.config, title)
+		const template = journalTemplate(this, title)
 		if (!template) {
 			throw new JournalError("No template found.")
 		}
 		let journalEntryPath = path.join(journalDirectory, `journal-${currentDate.toDateString().split(' ').join('-')}.md`)
 		if (FileSystem.isFile(journalEntryPath)) {
+			if(title === "") {
+				FileSystem.Open(journalEntryPath)
+				this.LOG.info('Journal opening existing', journalEntryPath)
+				return
+			}
 			journalEntryPath = journalEntryPath.slice(0, -3) + '-' + currentDate.getTime() + '.md'
 		}
 		FileSystem.writeFile(journalEntryPath, template)
 		openFile(journalEntryPath)
-		this.LOG.debug('Journal set created at', journalEntryPath)
+		this.LOG.info('Journal created at', journalEntryPath)
 	}
 	Directory(journalPath?: string) {
 		// const journalPath = programOptions.dir
