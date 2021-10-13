@@ -19,7 +19,9 @@ program
 .option('-u, --upload', 'Upload saved journal entries to provided storage solution')
 .option('-V, --verbose', 'Print verbose debug logging')
 .option('-o, --open', 'Open current journal directory')
+.option('-l, --locale <locale>', 'Set your desired locale, eg. "en-GB"')
 .option('--delete', 'Delete something? Not sure')
+.option('-a, --about', 'Display information about Journal CLI')
 .option('-t, --template <template-name>', 'Set which template to use. Name, or path to template')
 .addHelpText('after', `
 Examples:
@@ -40,9 +42,6 @@ $ journal --config <path-to-config-file>
 	const programOptions = program.opts()
 	const LOG = new Logger(!!programOptions.verbose)
 	try {
-		// if(programOptions.dir) {
-		// 	return
-		// }
 		const config = JournalConfig.getJournalConfig()
 		const journal = new JournalSystem(config, LOG)
 		LOG.debug('program.args', program.args)
@@ -51,11 +50,6 @@ $ journal --config <path-to-config-file>
 				LOG.debug('Running dir')
 				journal.Directory(programOptions.dir)
 				break
-			// case !!programOptions.config: // Going to remove this probably, as it is fully implicit
-			// 	LOG.debug('Running config')
-			// 	journal.Config(programOptions.config)
-			// 	break
-			// template is a setting, not a something else
 			case !!programOptions.template:
 				LOG.debug('Running template')
 				journal.Template(programOptions.template)
@@ -87,6 +81,14 @@ $ journal --config <path-to-config-file>
 			case !!programOptions.open:
 				LOG.debug('Running open')
 				journal.Open()
+				break
+			case !!programOptions.locale:
+				LOG.debug('Running locale')
+				journal.Locale(programOptions.locale)
+				break
+			case !!programOptions.about:
+				LOG.debug('Running about')
+				journal.About()
 				break
 			default:
 				LOG.debug('Running default')
