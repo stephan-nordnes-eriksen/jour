@@ -10,6 +10,8 @@ export class JournalConfig {
 		public path: string,
 		public template: string,
 		public extraData: {},
+		public currentTime: Date = new Date(),
+		public locale: string = Intl.DateTimeFormat().resolvedOptions().locale,
 	){}
 
 	updateTemplate(template: string) {
@@ -20,12 +22,16 @@ export class JournalConfig {
 		this.extraData = extraData
 		return this.save()
 	}
+	updateLocale(locale: string) {
+		this.locale = locale
+		return this.save()
+	}
 	save() {
 		const configPath = JournalConfig.getJournalConfigPath()
 		const fullConfigContent = JSON.parse(FileSystem.readFile(configPath) || "{}")
 		fullConfigContent.template = this.template
 		fullConfigContent.extraData = this.extraData
-		FileSystem.writeFile(configPath, JSON.stringify(fullConfigContent), true)
+		FileSystem.writeFile(configPath, JSON.stringify(fullConfigContent, null, 2), true)
 		return true
 	}
 	static getGlobalSettingsPath(): string { // Should be private, but need it right now
@@ -61,7 +67,9 @@ export class JournalConfig {
 			return new JournalConfig(
 				JournalConfig.getCurrentJournalPath(),
 				jsonConfig?.template || defaultConfig.template,
-				jsonConfig?.extraData || defaultConfig.extraData
+				jsonConfig?.extraData || defaultConfig.extraData,
+				new Date(),
+				jsonConfig?.locale || defaultConfig.locale,
 			)
 		} catch (error) {
 			if(error.message !== 'Unexpected end of JSON input'){
@@ -72,4 +80,4 @@ export class JournalConfig {
 	}
 }
 
-const defaultConfig: JournalConfig = new JournalConfig('', 'journal', {})
+const defaultConfig: JournalConfig = new JournalConfig('', 'journal', {}, new Date(), Intl.DateTimeFormat().resolvedOptions().locale)

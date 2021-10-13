@@ -1,5 +1,5 @@
 import fs from 'fs'
-
+import { execSync } from 'child_process'
 export class FileSystem {
 	static getRealPath(path: string): string {
 		return fs.realpathSync(path)
@@ -24,5 +24,15 @@ export class FileSystem {
 		} catch (error) {
 			return ""
 		}
+	}
+	static Open(path: string) {
+		switch (process.platform) {
+			case 'darwin':
+				return execSync('open ' + path)
+			case 'win32':
+				return execSync('start ' + path)
+			default:
+				return execSync('xdg-open ' + path)
+		 }
 	}
 }
