@@ -9,14 +9,14 @@ import { GitHandler } from './gitHandler'
 import { JournalError } from './JournalError'
 
 export class JournalSystem {
-	constructor(private config: JournalConfig, public LOG: Logger){
+	constructor(private config: JournalConfig, public LOG: Logger) {
 
 	}
 
 	NewJournalEntry(title: string) {
 		// ...
 		const journalDirectory = JournalConfig.getCurrentJournalPath()
-		if(!journalDirectory || !FileSystem.isDirectory(journalDirectory)) {
+		if (!journalDirectory || !FileSystem.isDirectory(journalDirectory)) {
 			throw new JournalError('Journal directory not available. Setup with `journal --dir <path>`')
 		}
 		// const title = cli?.input?.join(' ') || ''
@@ -24,11 +24,11 @@ export class JournalSystem {
 
 		const currentDate = new Date()
 		const template = journalTemplate(this.config, title)
-		if(!template){
+		if (!template) {
 			throw new JournalError("No template found.")
 		}
 		let journalEntryPath = path.join(journalDirectory, `journal-${currentDate.toDateString().split(' ').join('-')}.md`)
-		if(FileSystem.isFile(journalEntryPath)){
+		if (FileSystem.isFile(journalEntryPath)) {
 			journalEntryPath = journalEntryPath.slice(0, -3) + '-' + currentDate.getTime() + '.md'
 		}
 		FileSystem.writeFile(journalEntryPath, template)
@@ -37,11 +37,11 @@ export class JournalSystem {
 	}
 	Directory(journalPath?: string) {
 		// const journalPath = programOptions.dir
-		if(!journalPath){
+		if (!journalPath) {
 			throw new JournalError('Please provide a valid path')
 		}
 		let absoluteJournalPath = journalPath
-		if(!FileSystem.isDirectory(journalPath)){
+		if (!FileSystem.isDirectory(journalPath)) {
 			// absoluteJournalPath = fileURLToPath(path.join(process.cwd(), journalPath))
 			throw new JournalError('Directory does not exist')
 		} else {
@@ -56,13 +56,13 @@ export class JournalSystem {
 
 	Template(template: string) {
 		const templatePath = Template.toPath(template)
-		if (!Template.isValidTemplateLocation(templatePath)){
+		if (!Template.isValidTemplateLocation(templatePath)) {
 			throw new JournalError('Invalid template name or path')
 		}
-		if (!Template.isValidTemplate(templatePath)){
+		if (!Template.isValidTemplate(templatePath)) {
 			throw new JournalError('Invalid template format\n\nJournal uses handlebars. Read about it here https://handlebarsjs.com')
 		}
-		if(this.config.updateTemplate(template)){
+		if (this.config.updateTemplate(template)) {
 			this.LOG.info('Template updated to', this.config.template)
 		} else {
 			throw new JournalError("Unable to save template change.")
@@ -73,7 +73,7 @@ export class JournalSystem {
 
 	ConnectGitStorage(gitRemote?: string | boolean) {
 		const journalPath = JournalConfig.getCurrentJournalPath()
-		if (typeof(gitRemote) === 'boolean'){
+		if (typeof (gitRemote) === 'boolean') {
 			gitRemote = ""
 		}
 		GitHandler.init(this, journalPath, gitRemote)
@@ -97,19 +97,50 @@ export class JournalSystem {
 		this.LOG.info('Current Journal ', this.config.path)
 		this.LOG.info('Template        ', this.config.template)
 		this.LOG.info('Extra data      ', this.config.extraData)
-		// this.LOG.info('config:         ', this.config)
+		this.LOG.info('Locale          ', this.config.locale)
+		this.LOG.debug('Full config:')
+		this.LOG.debug(JSON.stringify(this.config, null, 2))
 	}
 	Version() {
 		const pj = require('../package.json')
 		this.LOG.info('Journal CLI version', pj.version)
+		this.LOG.debug('Dependency versions:')
+		this.LOG.debug(JSON.stringify(pj.dependencies, null, 2))
 	}
 	Open() {
-		const journalPath = JournalConfig.getCurrentJournalPath()
+			const journalPath = JournalConfig.getCurrentJournalPath()
 		FileSystem.Open(journalPath)
 	}
 	Locale(locale: string) {
 		// todo; but set locale in config
-		if(this.config.updateLocale(locale)){
+		// Intl.DateTimeFormat().resolvedOptions().locale
+		let actualLocale = locale
+		try {
+			// Intl.getCanonicalLocales('EN_US');
+			actualLocale = Intl.DateTimeFormat(locale).resolvedOptions().locale
+		} catch (err) {
+			this.LOG.debug(err)
+			throw new JournalError("Invalid locale " + locale)
 		}
+		if (this.config.updateLocale(actualLocale)) {
+			this.LOG.info('Locale updated to', locale)
+		}
+	}
+	About() {
+		const pj = require('../package.json')
+		this.LOG.info('')
+		this.LOG.info('')
+		this.LOG.info('Journal cli')
+		this.LOG.info('')
+		this.LOG.info('Created by')
+		this.LOG.info(pj.author.name)
+		this.LOG.info('')
+		this.LOG.info('License')
+		this.LOG.info(pj.license)
+		this.LOG.info('')
+		this.LOG.info('Code available at')
+		this.LOG.info('https://github.com/' + pj.repository)
+		this.LOG.info('   give it a <3 !')
+
 	}
 }

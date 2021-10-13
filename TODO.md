@@ -2,18 +2,20 @@
 - [X] template files (handlebar)
 - [X] settings-file in folder
 - [X] settings file with configs on templates and more.
-  - [ ] Template file setting
-- [ ] Possible git integration
-  - [ ] journal --save => git add . && git commit -m "journal saved"
-  - [ ] journal --upload => git push origin master
-  - [ ] journal --connect $1 => git origin add $1
+  - [X] Template file setting
+- [X] Possible git integration
+  - [x] journal --save => git add . && git commit -m "journal saved"
+  - [?] journal --upload => git push origin master
+  - [?] journal --connect $1 => git origin add $1 (should work, but not tested with remote)
 - [X] typescript
 - [X] read config file in path, or default file
 - [X] Print current config with --info
 - [ ] Update template saves relative path, not absolute
-- [ ] Locale for time string
+- [X] Locale for time string
 - [X] Pretty json in config file
 - [ ] standard-version
 - [ ] github actions for builds and test
 - [X] Better control flow with throws and custom error type
-
+- [ ] Add git-info to the --info command
+- [ ] add more to help-text
+- [X] Add about command
