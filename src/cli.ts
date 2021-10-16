@@ -7,7 +7,7 @@ import { JourSystem } from './JourSystem.js'
 import { Logger } from './Logger.js'
 
 
-const program = new Command()
+const program = new Command("jour")
 //.argument('<words...>') // This seems suboptimal
 program
 .option('-d, --dir <directory>', 'Set jour directory')
@@ -22,6 +22,7 @@ program
 .option('-o, --open', 'Open current jour directory')
 .option('-l, --locale <locale>', 'Set your desired locale, for date and time formatting. eg. "en-GB" (Unicode Language Identifier)')
 .option('-a, --about', 'Display information about Jour CLI')
+// .version("1.0.0") // TODO: Load config and set this, or maybe not?
 .addHelpText('after', `
 Examples:
 $ jour --dir ./my/desired/jour/directory

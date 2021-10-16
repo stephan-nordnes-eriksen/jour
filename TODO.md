@@ -21,5 +21,9 @@
 - [X] Add about command
 - [X] Possibly make the empty jour command, eg `$ jour` open todays jour. Even the non-empty command could append to todays jour, and open.
 - [ ] Consider having the non-empty jour command append to existing jour entry
-- [ ] -n, --new => Force new template even if existing.
-- [ ] Rename to "jour"
+- [ ] -n, --new => Force new journal entry even if one is existing. We are kind-of doing this today with `$ jour Anything here`. If we do the above task, this becomes useful.
+- [ ] --template-new  Make almost-empty new template
+- [X] Rename to "jour"
+- [ ] Use built in version command (.version)
+- [ ] Actually useful unit tests.
+- [ ]
