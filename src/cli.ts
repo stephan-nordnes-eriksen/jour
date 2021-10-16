@@ -15,20 +15,19 @@ program
 .option('-i, --info', 'Display information about current jour directory')
 .option('-v, --version', 'Display version info')
 // .option('-c, --config <configuration-file>', 'Set configuration file') // I think this is simply implicit from the jour path
-.option('-c, --connect [optional-git-origin-repo-url]', 'Initialize and optionally connect to git storage solution on current jour directory.')
-.option('-s, --save', 'save all modified files in jour directory with provided storage solution')
-.option('-u, --upload', 'Upload saved jour entries to provided storage solution')
+.option('-c, --connect [optional-git-origin-repo-url]', 'Initialize, and optionally connect to remote, git in current jour directory.')
+.option('-s, --save', 'Adds, and commits, all files in current jour directory to git.')
+.option('-u, --upload', 'Pushes all git changes to remote repository.')
 .option('-V, --verbose', 'Print verbose debug logging')
 .option('-o, --open', 'Open current jour directory')
-.option('-l, --locale <locale>', 'Set your desired locale, eg. "en-GB"')
-.option('--delete', 'Delete something? Not sure')
+.option('-l, --locale <locale>', 'Set your desired locale, for date and time formatting. eg. "en-GB" (Unicode Language Identifier)')
 .option('-a, --about', 'Display information about Jour CLI')
 .addHelpText('after', `
 Examples:
 $ jour --dir ./my/desired/jour/directory
 	Set current jour directory. Jour directory is set globally.
 $ jour
-	Generate todays jour entry, or open existing entry if one already exists.
+	Generate todays jour entry, or open existing entry if one already exists. Open in default editor.
 $ jour Title for todays entry
 	Generate a new daily jour entry, tagged today, with the provided written title. Unix timestamped if exists.
 $ jour --template memo
@@ -45,6 +44,7 @@ $ jour --save
 	Adds, and commits, all files in current jour directory to git.
 $ jour --upload
 	Pushes all git changes to remote repository.
+
 `)
 .action(() => {
 	const programOptions = program.opts()
@@ -71,10 +71,6 @@ $ jour --upload
 				jour.Save()
 				break
 			case !!programOptions.upload:
-				LOG.debug('Running upload')
-				jour.Upload()
-				break
-			case !!programOptions.delete:
 				LOG.debug('Running upload')
 				jour.Upload()
 				break
