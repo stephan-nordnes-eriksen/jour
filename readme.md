@@ -1,34 +1,40 @@
-# journal-cli
+# Jour cli
 
-> A simple, and hopefully effective, personal journal tool
+> Simple, and hopefully effective, personal journaling tool
 
 ## Install
 
 ```
-$ npm install --global journal-cli (? or what)
+$ npm install --global jour
 ```
 
 ## Usage
 
 ```
-$ journal --help
+$ jour --help
 
   Usage
-		$ journal
-		$ journal <title>
+		$ jour
+		$ jour <title>
 	Options
 		--template  Which template to use. Only one now  [Default: memo]
-		--setup		Setup journal directory
+		--dir		Setup jour directory
 	Examples
-		$ journal --setup ./my/desired/journal/directory
-			Setup your journal to target this folder
-		$ journal
-			creates a new journal entry, tagged today.
-		$ journal This is my journal title entry
-			creates a new journal entry, tagged today, with the provided written title.
+		$ jour --dir ./my/desired/jour/directory
+			Setup your jour to target this folder
+		$ jour
+			creates a new jour entry, tagged today.
+		$ jour This is my jour title entry
+			creates a new jour entry, tagged today, with the provided written title.
 ```
 
 
-> journal --setup ./my
+> jour --dir ./my
 
-License MIT
+## Intended use
+This tool is intended to aid you in making a daily journal. Typically, you want to configure your desired journal path once, and then use the tool to generate new entries each day from anywhere in your terminal.
+
+There is one global jour directory at a time, so no matter which directory your terminal points to, the generated jour entry will always be put into your currently selected jour directory.
+
+## License
+MIT

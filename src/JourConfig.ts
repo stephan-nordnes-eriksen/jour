@@ -2,10 +2,10 @@ import path from 'path'
 import { FileSystem } from './FileSystem'
 
 
-let cachedJournalPath = ""
-let cachedJournalConfig: JournalConfig | undefined = undefined
+let cachedJourPath = ""
+let cachedJourConfig: JourConfig | undefined = undefined
 
-export class JournalConfig {
+export class JourConfig {
 	constructor(
 		public path: string,
 		public template: string,
@@ -27,7 +27,7 @@ export class JournalConfig {
 		return this.save()
 	}
 	save() {
-		const configPath = JournalConfig.getJournalConfigPath()
+		const configPath = JourConfig.getJourConfigPath()
 		const fullConfigContent = JSON.parse(FileSystem.readFile(configPath) || "{}")
 		fullConfigContent.template = this.template
 		fullConfigContent.extraData = this.extraData
@@ -35,37 +35,37 @@ export class JournalConfig {
 		return true
 	}
 	static getGlobalSettingsPath(): string { // Should be private, but need it right now
-		return path.resolve(path.join(__dirname, '..', 'journal.settings'))
+		return path.resolve(path.join(__dirname, '..', 'jour.settings'))
 	}
 
-	static getCurrentJournalPath(): string {
-		if(cachedJournalPath) {
-			return cachedJournalPath
+	static getCurrentJourPath(): string {
+		if(cachedJourPath) {
+			return cachedJourPath
 		}
-		const settingsPath = JournalConfig.getGlobalSettingsPath()
-		cachedJournalPath = FileSystem.readFile(settingsPath)
-		return cachedJournalPath
+		const settingsPath = JourConfig.getGlobalSettingsPath()
+		cachedJourPath = FileSystem.readFile(settingsPath)
+		return cachedJourPath
 	}
 
-	private static getJournalConfigPath(){
-		return path.join(JournalConfig.getCurrentJournalPath(), 'journal.json')
+	private static getJourConfigPath(){
+		return path.join(JourConfig.getCurrentJourPath(), 'jour.json')
 	}
 
-	static getJournalConfig(): JournalConfig {
-		if(cachedJournalConfig) {
-			return cachedJournalConfig
+	static getJourConfig(): JourConfig {
+		if(cachedJourConfig) {
+			return cachedJourConfig
 		}
-		cachedJournalConfig = this.loadConfigFile()
-		cachedJournalConfig.path = JournalConfig.getCurrentJournalPath()
-		return cachedJournalConfig
+		cachedJourConfig = this.loadConfigFile()
+		cachedJourConfig.path = JourConfig.getCurrentJourPath()
+		return cachedJourConfig
 	}
-	private static loadConfigFile(): JournalConfig {
+	private static loadConfigFile(): JourConfig {
 		try {
-			const configPath = JournalConfig.getJournalConfigPath()
+			const configPath = JourConfig.getJourConfigPath()
 			const jsonConfig = JSON.parse(FileSystem.readFile(configPath))
 
-			return new JournalConfig(
-				JournalConfig.getCurrentJournalPath(),
+			return new JourConfig(
+				JourConfig.getCurrentJourPath(),
 				jsonConfig?.template || defaultConfig.template,
 				jsonConfig?.extraData || defaultConfig.extraData,
 				new Date(),
@@ -80,4 +80,4 @@ export class JournalConfig {
 	}
 }
 
-const defaultConfig: JournalConfig = new JournalConfig('', 'journal', {}, new Date(), Intl.DateTimeFormat().resolvedOptions().locale)
+const defaultConfig: JourConfig = new JourConfig('', 'jour', {}, new Date(), Intl.DateTimeFormat().resolvedOptions().locale)

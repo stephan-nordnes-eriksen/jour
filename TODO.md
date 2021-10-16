@@ -4,9 +4,9 @@
 - [X] settings file with configs on templates and more.
   - [X] Template file setting
 - [X] Possible git integration
-  - [x] journal --save => git add . && git commit -m "journal saved"
-  - [?] journal --upload => git push origin master
-  - [?] journal --connect $1 => git origin add $1 (should work, but not tested with remote)
+  - [x] jour --save => git add . && git commit -m "jour saved"
+  - [?] jour --upload => git push origin master
+  - [?] jour --connect $1 => git origin add $1 (should work, but not tested with remote)
 - [X] typescript
 - [X] read config file in path, or default file
 - [X] Print current config with --info
@@ -19,6 +19,7 @@
 - [ ] Add git-info to the --info command
 - [ ] add more to help-text
 - [X] Add about command
-- [X] Possibly make the empty journal command, eg `$ journal` open todays journal. Even the non-empty command could append to todays journal, and open.
-- [ ] Consider having the non-empty journal command append to existing journal entry
+- [X] Possibly make the empty jour command, eg `$ jour` open todays jour. Even the non-empty command could append to todays jour, and open.
+- [ ] Consider having the non-empty jour command append to existing jour entry
 - [ ] -n, --new => Force new template even if existing.
+- [ ] Rename to "jour"
