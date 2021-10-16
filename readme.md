@@ -11,21 +11,44 @@ $ npm install --global jour
 ## Usage
 
 ```
-$ jour --help
+Usage: cli [options]
 
-  Usage
-		$ jour
-		$ jour <title>
-	Options
-		--template  Which template to use. Only one now  [Default: memo]
-		--dir		Setup jour directory
-	Examples
-		$ jour --dir ./my/desired/jour/directory
-			Setup your jour to target this folder
-		$ jour
-			creates a new jour entry, tagged today.
-		$ jour This is my jour title entry
-			creates a new jour entry, tagged today, with the provided written title.
+Options:
+  -d, --dir <directory>                         Set jour directory
+  -t, --template <template-name>                Set which template to use. Name, or path to template
+  -i, --info                                    Display information about current jour directory
+  -v, --version                                 Display version info
+  -c, --connect [optional-git-origin-repo-url]  Initialize, and optionally connect to remote, git in current jour directory.
+  -s, --save                                    Adds, and commits, all files in current jour directory to git.
+  -u, --upload                                  Pushes all git changes to remote repository.
+  -V, --verbose                                 Print verbose debug logging
+  -o, --open                                    Open current jour directory
+  -l, --locale <locale>                         Set your desired locale, for date and time formatting. eg. "en-GB" (Unicode Language Identifier)
+  -a, --about                                   Display information about Jour CLI
+  -h, --help                                    display help for command
+
+Examples:
+$ jour --dir ./my/desired/jour/directory
+        Set current jour directory. Jour directory is set globally.
+$ jour
+        Generate todays jour entry, or open existing entry if one already exists. Open in default editor.
+$ jour Title for todays entry
+        Generate a new daily jour entry, tagged today, with the provided written title. Unix timestamped if exists.
+$ jour --template memo
+        Set jour template for the current jour directory. Updates jour.json in jour directory.
+$ jour --template ./my/desired/template.hbs
+        Set custom jour template for the current jour directory. Updates jour.json in jour directory.
+
+Git connection:
+$ jour --connect
+        Initializes git in current jour directory. Jour creates a branch named "jour" which is used by default.
+$ jour --connect https://github.com/YOUR-USERNAME/my-daily-journal
+        Initializes git in current jour directory, connecting to your provided remote url.
+$ jour --save
+        Adds, and commits, all files in current jour directory to git.
+$ jour --upload
+        Pushes all git changes to remote repository.
+
 ```
 
 
