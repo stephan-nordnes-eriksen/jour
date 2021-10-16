@@ -6,3 +6,4 @@ jour.settings
 dist
 test-journal-*
 coverage
+*.tgz
