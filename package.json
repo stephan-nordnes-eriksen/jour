@@ -17,6 +17,7 @@
 	},
 	"scripts": {
 		"build": "tsc; chmod +x dist/cli.js",
+		"prepack": "npm build",
 		"lint-fix": "eslint --fix",
 		"copy-static-assets": "ts-node copyStaticAssets.ts",
 		"debug": "npm run build && npm run watch-debug",
@@ -29,10 +30,11 @@
 		"watch-node": "nodemon dist/server.js",
 		"watch-sass": "sass --watch src/public/css/main.scss dist/public/css/main.css",
 		"watch-test": "npm run test -- --watchAll",
-		"watch-ts": "tsc -w"
+		"watch-ts": "tsc -w",
+		"patch-release": "npm version patch && npm publish && git push --follow-tags"
 	},
 	"files": [
-		"dist/cli.js"
+		"dist/"
 	],
 	"keywords": [
 		"cli",
