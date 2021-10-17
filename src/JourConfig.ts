@@ -80,4 +80,4 @@ export class JourConfig {
 	}
 }
 
-const defaultConfig: JourConfig = new JourConfig('', 'jour', {}, new Date(), Intl.DateTimeFormat().resolvedOptions().locale)
+const defaultConfig: JourConfig = new JourConfig('', 'journal', {}, new Date(), Intl.DateTimeFormat().resolvedOptions().locale)
