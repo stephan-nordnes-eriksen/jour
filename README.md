@@ -2,6 +2,8 @@
 
 > Simple, and hopefully effective, personal journaling tool
 
+Use jour to help you create daily journal entries, right from your terminal.
+
 ## Install
 
 ```
