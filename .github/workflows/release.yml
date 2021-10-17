@@ -4,8 +4,9 @@ on:
     branches:
       - main
 jobs:
-  test:
-    name: Node.js ${{ matrix.node-version }}
+  release:
+    name: NPM publish ${{ matrix.node-version }}
+    if: github.actor != 'github'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -20,4 +21,4 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: npm test
-      # - run: npm run patch-release # enable soon
+      - run: npm run patch-release
