@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.9 (2021-10-17)
+
+
+### Bug Fixes
+
+* set npmrc correctly ([833d82f](https://github.com/stephan-nordnes-eriksen/jour/commit/833d82f27848e87b8c8b938ab23d6b2274c2b375))
+
 ### 0.0.8 (2021-10-17)
 
 ### 0.0.7 (2021-10-17)
