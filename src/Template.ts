@@ -9,7 +9,7 @@ const randomAwesomeShorts = [
 	"Had dinner with family",
 	"Hiked a mountain",
 ]
-export function jourTemplate(js: JourSystem, title = "") {
+export function jourTemplate(js: JourSystem, title = ""): string {
 	const currentDateString = js.config.currentTime.toLocaleDateString(js.config.locale)
 	const jourTemplateData: TemplateData = {
 		entryTitle: 'Jour cli',
@@ -49,7 +49,7 @@ export class Template {
 			throw new JourError('Template file not found. Set it with `jour --template-path <path-to-template-folder>`')
 		}
 	}
-	static isValidTemplate(templateString: string){
+	static isValidTemplate(templateString: string): boolean{
 		try {
 			Handlebars.precompile(templateString)
 			return true
@@ -57,11 +57,11 @@ export class Template {
 			return false
 		}
 	}
-	static isValidTemplateLocation(templateNameOrPath: string) {
+	static isValidTemplateLocation(templateNameOrPath: string): boolean {
 		return FileSystem.isFile(templateNameOrPath)
 		|| FileSystem.isFile(path.join(__dirname, '..', 'templates', templateNameOrPath + '.hbs'))
 	}
-	static toPath(templateNameOrPath: string) {
+	static toPath(templateNameOrPath: string): string {
 		if(FileSystem.isFile(templateNameOrPath)){
 			return templateNameOrPath
 		} else {
