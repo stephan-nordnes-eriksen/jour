@@ -1,3 +1,6 @@
+## Known issues
+Due to ci/cd, the current version has broken templates. Working on it.
+
 # Jour cli
 
 > Simple, and hopefully effective, personal journaling tool
