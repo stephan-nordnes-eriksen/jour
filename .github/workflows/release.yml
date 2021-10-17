@@ -1,6 +1,8 @@
-name: CI
+name: Release, publish to NPM
 on:
-  - pull_request
+  push:
+    branches:
+      - main
 jobs:
   test:
     name: Node.js ${{ matrix.node-version }}
@@ -10,7 +12,6 @@ jobs:
       matrix:
         node-version:
           - 14
-          - 12
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -19,3 +20,4 @@ jobs:
       - run: npm install
       - run: npm build
       - run: npm test
+      # - run: npm run patch-release # enable soon
