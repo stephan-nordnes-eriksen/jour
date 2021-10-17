@@ -13,7 +13,7 @@ export class JourSystem {
 
 	}
 
-	NewJourEntry(title: string) {
+	NewJourEntry(title: string): void {
 		const jourDirectory = JourConfig.getCurrentJourPath()
 		if (!jourDirectory || !FileSystem.isDirectory(jourDirectory)) {
 			throw new JourError('Jour directory not available. Setup with `jour --dir <path>`')
@@ -37,7 +37,7 @@ export class JourSystem {
 		openFile(jourEntryPath)
 		this.LOG.info('Jour entry created at', jourEntryPath)
 	}
-	Directory(jourPath?: string) {
+	Directory(jourPath?: string): void {
 		if (!jourPath) {
 			throw new JourError('Please provide a valid path')
 		}
@@ -54,7 +54,7 @@ export class JourSystem {
 		this.LOG.info('Jour directory set to', absoluteJourPath)
 	}
 
-	Template(template: string) {
+	Template(template: string): void {
 		const templatePath = Template.toPath(template)
 		if (!Template.isValidTemplateLocation(templatePath)) {
 			throw new JourError('Invalid template name or path')
@@ -71,7 +71,7 @@ export class JourSystem {
 	// Config(configFilePath: string) {
 	// }
 
-	ConnectGitStorage(gitRemote?: string | boolean) {
+	ConnectGitStorage(gitRemote?: string | boolean): void {
 		const jourPath = JourConfig.getCurrentJourPath()
 		if (typeof (gitRemote) === 'boolean') {
 			gitRemote = ""
@@ -80,19 +80,19 @@ export class JourSystem {
 		this.LOG.info('Git connected in', jourPath)
 	}
 
-	Save() {
+	Save(): void {
 		const jourPath = JourConfig.getCurrentJourPath() // I think this is available in the config.
 		GitHandler.save(this, jourPath)
 		this.LOG.info('Saved in git', jourPath)
 	}
 
-	Upload() {
+	Upload(): void {
 		const jourPath = JourConfig.getCurrentJourPath()
 		GitHandler.upload(this, jourPath)
 		this.LOG.info('Uploaded in git', jourPath)
 	}
 
-	Info() {
+	Info(): void {
 		this.Version()
 		this.LOG.info('Current Jour directory ', this.config.path)
 		this.LOG.info('Template               ', this.config.template)
@@ -101,17 +101,18 @@ export class JourSystem {
 		this.LOG.debug('Full config:')
 		this.LOG.debug(JSON.stringify(this.config, null, 2))
 	}
-	Version() {
+	Version(): void {
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const pj = require('../package.json')
 		this.LOG.info('Jour CLI version', pj.version)
 		this.LOG.debug('Dependency versions:')
 		this.LOG.debug(JSON.stringify(pj.dependencies, null, 2))
 	}
-	Open() {
+	Open(): void {
 		const jourPath = JourConfig.getCurrentJourPath()
 		FileSystem.Open(jourPath)
 	}
-	Locale(locale: string) {
+	Locale(locale: string): void {
 		// todo; but set locale in config
 		// Intl.DateTimeFormat().resolvedOptions().locale
 		let actualLocale = locale
@@ -126,7 +127,8 @@ export class JourSystem {
 			this.LOG.info('Locale updated to', locale)
 		}
 	}
-	About() {
+	About(): void {
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const pj = require('../package.json')
 		this.LOG.info('')
 		this.LOG.info('')
@@ -146,7 +148,7 @@ export class JourSystem {
 		this.printLogo("Jour CLI - Simply write 📔")
 	}
 
-	async printLogo(inputText: string, progress = 1) {
+	async printLogo(inputText: string, progress = 1): Promise<unknown> {
 		if(progress > inputText.length){
 			this.LOG.info('')
 			return
