@@ -34,7 +34,8 @@
 		"patch-release": "standard-version && git push --follow-tags && npm publish"
 	},
 	"files": [
-		"dist/"
+		"dist/",
+		"templates/"
 	],
 	"keywords": [
 		"cli",
