@@ -6,7 +6,7 @@ on:
 jobs:
   release:
     name: NPM publish ${{ matrix.node-version }}
-    if: github.actor != 'github'
+    if: github.actor != 'GitHub Actions Bot'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -21,6 +21,11 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: npm test
+      - name: setup git config
+        run: |
+          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
       - run: npm run patch-release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
