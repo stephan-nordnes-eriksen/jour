@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.0.2 (2021-10-17)
+
+
+### Bug Fixes
+
+* add templates to release ([aa90cae](https://github.com/stephan-nordnes-eriksen/jour/commit/aa90cae7bdd5f91ece64d69c7441ddad3767200c))
+
 ### 1.0.1 (2021-10-17)
 
 ## [1.0.0](https://github.com/stephan-nordnes-eriksen/jour/compare/v0.0.9...v1.0.0) (2021-10-17)
