@@ -1,6 +1,6 @@
 {
 	"name": "jour-cli",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Simple, and hopefully effective, personal journaling tool",
 	"license": "MIT",
 	"repository": "stephan-nordnes-eriksen/jour",
