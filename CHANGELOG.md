@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/stephan-nordnes-eriksen/jour/compare/v0.0.9...v1.0.0) (2021-10-17)
+
+
+### Features
+
+* First release ([5c6d8a3](https://github.com/stephan-nordnes-eriksen/jour/commit/5c6d8a32fdaac397a159d75697472bbee46da382))
+
 ### 0.0.9 (2021-10-17)
 
 
