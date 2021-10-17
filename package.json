@@ -17,7 +17,7 @@
 	},
 	"scripts": {
 		"build": "tsc; chmod +x dist/cli.js",
-		"prepack": "npm build",
+		"prepack": "npm run build",
 		"lint-fix": "eslint --fix",
 		"copy-static-assets": "ts-node copyStaticAssets.ts",
 		"debug": "npm run build && npm run watch-debug",
