@@ -5,7 +5,7 @@
 ## Install
 
 ```
-$ npm install --global jour
+$ npm install --global jour-cli
 ```
 
 ## Usage
