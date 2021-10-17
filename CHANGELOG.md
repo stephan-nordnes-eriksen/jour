@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.0.3 (2021-10-17)
+
+
+### Bug Fixes
+
+* adding info about issue ([140f24c](https://github.com/stephan-nordnes-eriksen/jour/commit/140f24cf45b553c1c975ca6a23474e3e4b775b86))
+
 ### 1.0.2 (2021-10-17)
 
 
