@@ -7,7 +7,6 @@ import { FileSystem } from './FileSystem'
 import { Logger } from './Logger'
 import { GitHandler } from './GitHandler'
 import { JourError } from './JourError'
-
 export class JourSystem {
 	constructor(public config: JourConfig, public LOG: Logger) {
 
@@ -19,19 +18,19 @@ export class JourSystem {
 			throw new JourError('Jour directory not available. Setup with `jour --dir <path>`')
 		}
 
-		const currentDate = new Date()
 		const template = jourTemplate(this, title)
 		if (!template) {
 			throw new JourError("No template found.")
 		}
-		let jourEntryPath = path.join(jourDirectory, `jour-${currentDate.toDateString().split(' ').join('-')}.md`)
+		let jourEntryPath = path.join(jourDirectory, `jour-${this.config.currentTime.toLocaleDateString(this.config.locale).split(/ |\//).join('-')}.md`)
+		this.LOG.debug('Jour entry path', jourEntryPath)
 		if (FileSystem.isFile(jourEntryPath)) {
 			if(title === "") {
 				FileSystem.Open(jourEntryPath)
 				this.LOG.info('Jour entry exists, opening', jourEntryPath)
 				return
 			}
-			jourEntryPath = jourEntryPath.slice(0, -3) + '-' + currentDate.getTime() + '.md'
+			jourEntryPath = jourEntryPath.slice(0, -3) + '-' + this.config.currentTime.getTime() + '.md'
 		}
 		FileSystem.writeFile(jourEntryPath, template)
 		openFile(jourEntryPath)

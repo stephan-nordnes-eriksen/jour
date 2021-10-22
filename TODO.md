@@ -26,4 +26,4 @@
 - [X] Rename to "jour"
 - [ ] Use built in version command (.version)
 - [ ] Actually useful unit tests.
-- [ ]
+- [ ] Minus days. "jour -1" => today -1 day. "jour -7" = today - 7 days
