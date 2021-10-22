@@ -10,7 +10,7 @@ import { Logger } from './Logger.js'
 const program = new Command("jour")
 //.argument('<words...>') // This seems suboptimal
 program
-.option('-d, --dir <directory>', 'Set jour directory')
+.option('-D, --dir <directory>', 'Set jour directory')
 .option('-t, --template <template-name>', 'Set which template to use. Name, or path to template')
 .option('-i, --info', 'Display information about current jour directory')
 .option('-v, --version', 'Display version info')
@@ -22,6 +22,9 @@ program
 .option('-o, --open', 'Open current jour directory')
 .option('-l, --locale <locale>', 'Set your desired locale, for date and time formatting. eg. "en-GB" (Unicode Language Identifier)')
 .option('-a, --about', 'Display information about Jour CLI')
+.option('-d, --day <number>', 'Day offset')
+.option('-w, --week <number>', 'Week offset')
+.option('-y, --year <number>', 'Year offset')
 // .version("1.0.0") // TODO: Load config and set this, or maybe not?
 .addHelpText('after', `
 Examples:
@@ -46,6 +49,15 @@ $ jour --save
 $ jour --upload
 	Pushes all git changes to remote repository.
 
+Time modifiers:
+$ jour --day -1 Yesterdays journal
+	Creates an entry dated today -1 day, eg. yesterday.
+$ jour --week 1 In one week I will write this journal
+	Creates an entry dated 1 week in the future
+$ jour --year -23 Back in the day
+	Creates an entry dated 23 years back in time
+$ jour --day -23 --week 2 --year -3 Strange times
+	Create an entry dated -23+14-365*3 = -1104 days ago.
 `)
 .action(() => {
 	const programOptions = program.opts()
@@ -53,6 +65,17 @@ $ jour --upload
 	try {
 		const config = JourConfig.getJourConfig()
 		const jour = new JourSystem(config, LOG)
+
+		if (programOptions.day && ! isNaN(Number(programOptions.day))) {
+			config.currentTime.setDate(config.currentTime.getDate() + Number(programOptions.day))
+		}
+		if (programOptions.week && ! isNaN(Number(programOptions.week))) {
+			config.currentTime.setDate(config.currentTime.getDate() + 7 * Number(programOptions.week))
+		}
+		if (programOptions.year && ! isNaN(Number(programOptions.year))) {
+			config.currentTime.setDate(config.currentTime.getDate() + 365 * Number(programOptions.year))
+		}
+		config.currentTime
 		LOG.debug('program.args', program.args)
 		switch (true) {
 			case !!programOptions.dir:
