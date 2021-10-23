@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.1.0 (2021-10-23)
+
+
+### Features
+
+* add time modifiers ([3f0c6ac](https://github.com/stephan-nordnes-eriksen/jour/commit/3f0c6ace20f2c4a189ab097323697bc7ab313b9a))
+
 ### 1.0.4 (2021-10-17)
 
 
