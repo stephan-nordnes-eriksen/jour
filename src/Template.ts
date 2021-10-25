@@ -63,7 +63,7 @@ export class Template {
 	}
 	static toPath(templateNameOrPath: string): string {
 		if(FileSystem.isFile(templateNameOrPath)){
-			return templateNameOrPath
+			return FileSystem.getRealPath(templateNameOrPath)
 		} else {
 			return path.join(__dirname, '..', 'templates', templateNameOrPath + '.hbs')
 		}

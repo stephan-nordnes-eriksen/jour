@@ -10,11 +10,11 @@
 - [X] typescript
 - [X] read config file in path, or default file
 - [X] Print current config with --info
-- [ ] Update template saves relative path, not absolute
+- [X] Update template saves relative path, not absolute
 - [X] Locale for time string
 - [X] Pretty json in config file
-- [ ] standard-version
-- [ ] github actions for builds and test
+- [X] standard-version
+- [X] github actions for builds and test
 - [X] Better control flow with throws and custom error type
 - [ ] Add git-info to the --info command
 - [ ] add more to help-text
@@ -26,4 +26,5 @@
 - [X] Rename to "jour"
 - [ ] Use built in version command (.version)
 - [ ] Actually useful unit tests.
-- [ ] Minus days. "jour -1" => today -1 day. "jour -7" = today - 7 days
+- [X] Minus days. "jour -1" => today -1 day. "jour -7" = today - 7 days
+- [ ] Set specific date. "jour --date 20.01.2021 That day I did this thing"
