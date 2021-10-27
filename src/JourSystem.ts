@@ -147,6 +147,19 @@ export class JourSystem {
 		this.printLogo("Jour CLI - Simply write 📔")
 	}
 
+	List(): void {
+		const jourDirectory = JourConfig.getCurrentJourPath()
+		const files = FileSystem.FilesInDirectory(jourDirectory).filter(file => {
+			return file.startsWith('jour-') && file.endsWith('.md')
+		})
+		if(files.length > 0) {
+			this.LOG.info("Jour entries:")
+		}
+		files.forEach(file => {
+			this.LOG.info(file)
+		})
+	}
+
 	async printLogo(inputText: string, progress = 1): Promise<unknown> {
 		if(progress > inputText.length){
 			this.LOG.info('')
