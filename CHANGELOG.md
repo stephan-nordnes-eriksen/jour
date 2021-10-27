@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.1.3 (2021-10-27)
+
+
+### Bug Fixes
+
+* replace period in filename ([f4eef76](https://github.com/stephan-nordnes-eriksen/jour/commit/f4eef76e3653b5b092a76fab5cf0e1b65cb0e7fd))
+
 ### 1.1.2 (2021-10-27)
 
 
