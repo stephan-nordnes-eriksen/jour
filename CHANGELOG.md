@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.1.2 (2021-10-27)
+
+
+### Bug Fixes
+
+* save locale ([b399005](https://github.com/stephan-nordnes-eriksen/jour/commit/b3990053c5500226d7e6fc812a2e8520ed51f584))
+
 ### 1.1.1 (2021-10-27)
 
 
