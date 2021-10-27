@@ -31,6 +31,8 @@ export class JourConfig {
 		const fullConfigContent = JSON.parse(FileSystem.readFile(configPath) || "{}")
 		fullConfigContent.template = this.template
 		fullConfigContent.extraData = this.extraData
+		fullConfigContent.locale = this.locale
+
 		FileSystem.writeFile(configPath, JSON.stringify(fullConfigContent, null, 2), true)
 		return true
 	}
