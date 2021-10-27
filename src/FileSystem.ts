@@ -35,12 +35,12 @@ export class FileSystem {
 	}
 	static Open(path: string) {
 		switch (process.platform) {
-			case 'darwin':
-				return execSync('open ' + path)
-			case 'win32':
-				return execSync('start ' + path)
-			default:
-				return execSync('xdg-open ' + path)
+		case 'darwin':
+			return execSync('open ' + path)
+		case 'win32':
+			return execSync('start ' + path)
+		default:
+			return execSync('xdg-open ' + path)
 		}
 	}
 }

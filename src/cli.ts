@@ -10,23 +10,23 @@ import { Logger } from './Logger.js'
 const program = new Command("jour")
 //.argument('<words...>') // This seems suboptimal
 program
-.option('-D, --dir <directory>', 'Set jour directory')
-.option('-t, --template <template-name>', 'Set which template to use. Name, or path to template')
-.option('-i, --info', 'Display information about current jour directory')
-.option('-v, --version', 'Display version info')
-.option('-c, --connect [optional-git-origin-repo-url]', 'Initialize, and optionally connect to remote, git in current jour directory.')
-.option('-s, --save', 'Adds, and commits, all files in current jour directory to git.')
-.option('-u, --upload', 'Pushes all git changes to remote repository.')
-.option('-V, --verbose', 'Print verbose debug logging')
-.option('-o, --open', 'Open current jour directory')
-.option('-l, --locale <locale>', 'Set your desired locale, for date and time formatting. eg. "en-GB" (Unicode Language Identifier)')
-.option('-a, --about', 'Display information about Jour CLI')
-.option('-d, --day <number>', 'Day offset')
-.option('-w, --week <number>', 'Week offset')
-.option('-y, --year <number>', 'Year offset')
-.option('-ls, --list', 'List jour entries')
+	.option('-D, --dir <directory>', 'Set jour directory')
+	.option('-t, --template <template-name>', 'Set which template to use. Name, or path to template')
+	.option('-i, --info', 'Display information about current jour directory')
+	.option('-v, --version', 'Display version info')
+	.option('-c, --connect [optional-git-origin-repo-url]', 'Initialize, and optionally connect to remote, git in current jour directory.')
+	.option('-s, --save', 'Adds, and commits, all files in current jour directory to git.')
+	.option('-u, --upload', 'Pushes all git changes to remote repository.')
+	.option('-V, --verbose', 'Print verbose debug logging')
+	.option('-o, --open', 'Open current jour directory')
+	.option('-l, --locale <locale>', 'Set your desired locale, for date and time formatting. eg. "en-GB" (Unicode Language Identifier)')
+	.option('-a, --about', 'Display information about Jour CLI')
+	.option('-d, --day <number>', 'Day offset')
+	.option('-w, --week <number>', 'Week offset')
+	.option('-y, --year <number>', 'Year offset')
+	.option('-ls, --list', 'List jour entries')
 // .version("1.0.0") // TODO: Load config and set this, or maybe not?
-.addHelpText('after', `
+	.addHelpText('after', `
 Examples:
 $ jour --dir ./my/desired/jour/directory
 	Set current jour directory. Jour directory is set globally.
@@ -59,25 +59,25 @@ $ jour --year -23 Back in the day
 $ jour --day -23 --week 2 --year -3 Strange times
 	Create an entry dated -23+14-365*3 = -1104 days ago.
 `)
-.action(() => {
-	const programOptions = program.opts()
-	const LOG = new Logger(!!programOptions.verbose)
-	try {
-		const config = JourConfig.getJourConfig()
-		const jour = new JourSystem(config, LOG)
+	.action(() => {
+		const programOptions = program.opts()
+		const LOG = new Logger(!!programOptions.verbose)
+		try {
+			const config = JourConfig.getJourConfig()
+			const jour = new JourSystem(config, LOG)
 
-		if (programOptions.day && ! isNaN(Number(programOptions.day))) {
-			config.currentTime.setDate(config.currentTime.getDate() + Number(programOptions.day))
-		}
-		if (programOptions.week && ! isNaN(Number(programOptions.week))) {
-			config.currentTime.setDate(config.currentTime.getDate() + 7 * Number(programOptions.week))
-		}
-		if (programOptions.year && ! isNaN(Number(programOptions.year))) {
-			config.currentTime.setDate(config.currentTime.getDate() + 365 * Number(programOptions.year))
-		}
-		config.currentTime
-		LOG.debug('program.args', program.args)
-		switch (true) {
+			if (programOptions.day && ! isNaN(Number(programOptions.day))) {
+				config.currentTime.setDate(config.currentTime.getDate() + Number(programOptions.day))
+			}
+			if (programOptions.week && ! isNaN(Number(programOptions.week))) {
+				config.currentTime.setDate(config.currentTime.getDate() + 7 * Number(programOptions.week))
+			}
+			if (programOptions.year && ! isNaN(Number(programOptions.year))) {
+				config.currentTime.setDate(config.currentTime.getDate() + 365 * Number(programOptions.year))
+			}
+			config.currentTime
+			LOG.debug('program.args', program.args)
+			switch (true) {
 			case !!programOptions.dir:
 				LOG.debug('Running dir')
 				jour.Directory(programOptions.dir)
@@ -127,11 +127,11 @@ $ jour --day -23 --week 2 --year -3 Strange times
 				LOG.debug('programOptions', programOptions)
 				jour.NewJourEntry(program?.args?.join(' ') || '')
 				break
+			}
+		} catch (error) {
+			if(error instanceof JourError){
+				LOG.error(error.message)
+				process.exit(1)
+			}
 		}
-	} catch (error) {
-		if(error instanceof JourError){
-			LOG.error(error.message)
-			process.exit(1)
-		}
-	}
-}).parse(process.argv)
+	}).parse(process.argv)
