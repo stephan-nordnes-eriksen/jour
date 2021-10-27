@@ -18,7 +18,7 @@ export class JourConfig {
 		this.template = template
 		return this.save()
 	}
-	updateExtraData(extraData: any){
+	updateExtraData(extraData: Record<string, unknown>){
 		this.extraData = extraData
 		return this.save()
 	}
