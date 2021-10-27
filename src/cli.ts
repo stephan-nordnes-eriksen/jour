@@ -14,7 +14,6 @@ program
 .option('-t, --template <template-name>', 'Set which template to use. Name, or path to template')
 .option('-i, --info', 'Display information about current jour directory')
 .option('-v, --version', 'Display version info')
-// .option('-c, --config <configuration-file>', 'Set configuration file') // I think this is simply implicit from the jour path
 .option('-c, --connect [optional-git-origin-repo-url]', 'Initialize, and optionally connect to remote, git in current jour directory.')
 .option('-s, --save', 'Adds, and commits, all files in current jour directory to git.')
 .option('-u, --upload', 'Pushes all git changes to remote repository.')
@@ -25,6 +24,7 @@ program
 .option('-d, --day <number>', 'Day offset')
 .option('-w, --week <number>', 'Week offset')
 .option('-y, --year <number>', 'Year offset')
+.option('-ls, --list', 'List jour entries')
 // .version("1.0.0") // TODO: Load config and set this, or maybe not?
 .addHelpText('after', `
 Examples:
@@ -117,6 +117,10 @@ $ jour --day -23 --week 2 --year -3 Strange times
 			case !!programOptions.about:
 				LOG.debug('Running about')
 				jour.About()
+				break
+			case !!programOptions.list:
+				LOG.debug('Running list')
+				jour.List()
 				break
 			default:
 				LOG.debug('Running default')

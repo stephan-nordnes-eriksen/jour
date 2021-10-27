@@ -1,5 +1,6 @@
 import fs from 'fs'
 import { execSync } from 'child_process'
+import { JourError } from './JourError'
 export class FileSystem {
 	static getRealPath(path: string): string {
 		return fs.realpathSync(path)
@@ -23,6 +24,13 @@ export class FileSystem {
 			return fs.readFileSync(path).toString()
 		} catch (error) {
 			return ""
+		}
+	}
+	static FilesInDirectory(path: string): string[] {
+		if(FileSystem.isDirectory(path)){
+			return fs.readdirSync(path)
+		} else {
+			throw new JourError("Not a directory. FilesInDirectory requires a directory")
 		}
 	}
 	static Open(path: string) {
