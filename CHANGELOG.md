@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.1.1 (2021-10-27)
+
+
+### Bug Fixes
+
+* indent rules tabs ([52d2a0f](https://github.com/stephan-nordnes-eriksen/jour/commit/52d2a0f637970be87e62d15d45462a19ca532c8d))
+
 ## 1.1.0 (2021-10-23)
 
 
