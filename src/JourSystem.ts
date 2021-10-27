@@ -22,7 +22,7 @@ export class JourSystem {
 		if (!template) {
 			throw new JourError("No template found.")
 		}
-		let jourEntryPath = path.join(jourDirectory, `jour-${this.config.currentTime.toLocaleDateString(this.config.locale).split(/ |\//).join('-')}.md`)
+		let jourEntryPath = path.join(jourDirectory, `jour-${this.config.currentTime.toLocaleDateString(this.config.locale).split(/ |\/|\./).join('-')}.md`)
 		this.LOG.debug('Jour entry path', jourEntryPath)
 		if (FileSystem.isFile(jourEntryPath)) {
 			if(title === "") {
