@@ -13,8 +13,8 @@ export class JourSystem {
 	}
 
 	NewJourEntry(title: string): void {
-		const jourDirectory = JourConfig.getCurrentJourPath()
-		if (!jourDirectory || !FileSystem.isDirectory(jourDirectory)) {
+		const jourDirectory = JourConfig.GetCurrentJourPath()
+		if (!jourDirectory || !FileSystem.IsDirectory(jourDirectory)) {
 			throw new JourError('Jour directory not available. Setup with `jour --dir <path>`')
 		}
 
@@ -24,7 +24,7 @@ export class JourSystem {
 		}
 		let jourEntryPath = path.join(jourDirectory, `jour-${this.config.currentTime.toLocaleDateString(this.config.locale).split(/ |\/|\./).join('-')}.md`)
 		this.LOG.debug('Jour entry path', jourEntryPath)
-		if (FileSystem.isFile(jourEntryPath)) {
+		if (FileSystem.IsFile(jourEntryPath)) {
 			if(title === "") {
 				FileSystem.Open(jourEntryPath)
 				this.LOG.info('Jour entry exists, opening', jourEntryPath)
@@ -32,7 +32,7 @@ export class JourSystem {
 			}
 			jourEntryPath = jourEntryPath.slice(0, -3) + '-' + this.config.currentTime.getTime() + '.md'
 		}
-		FileSystem.writeFile(jourEntryPath, template)
+		FileSystem.WriteFile(jourEntryPath, template)
 		openFile(jourEntryPath)
 		this.LOG.info('Jour entry created at', jourEntryPath)
 	}
@@ -41,24 +41,24 @@ export class JourSystem {
 			throw new JourError('Please provide a valid path')
 		}
 		let absoluteJourPath = jourPath
-		if (!FileSystem.isDirectory(jourPath)) {
+		if (!FileSystem.IsDirectory(jourPath)) {
 			throw new JourError('Directory does not exist')
 		} else {
-			absoluteJourPath = FileSystem.getRealPath(absoluteJourPath)
+			absoluteJourPath = FileSystem.GetRealPath(absoluteJourPath)
 		}
-		this.LOG.debug('JourConfig.getGlobalSettingsPath()', JourConfig.getGlobalSettingsPath())
+		this.LOG.debug('JourConfig.getGlobalSettingsPath()', JourConfig.GetGlobalSettingsPath())
 		this.LOG.debug('absoluteJourPath', absoluteJourPath)
-		this.LOG.debug('JourConfig.getGlobalSettingsPath()', JourConfig.getGlobalSettingsPath())
-		FileSystem.writeFile(JourConfig.getGlobalSettingsPath(), absoluteJourPath, true)
+		this.LOG.debug('JourConfig.getGlobalSettingsPath()', JourConfig.GetGlobalSettingsPath())
+		FileSystem.WriteFile(JourConfig.GetGlobalSettingsPath(), absoluteJourPath, true)
 		this.LOG.info('Jour directory set to', absoluteJourPath)
 	}
 
 	Template(template: string): void {
-		const templatePath = Template.toPath(template)
-		if (!Template.isValidTemplateLocation(templatePath)) {
+		const templatePath = Template.ToPath(template)
+		if (!Template.IsValidTemplateLocation(templatePath)) {
 			throw new JourError('Invalid template name or path')
 		}
-		if (!Template.isValidTemplate(templatePath)) {
+		if (!Template.IsValidTemplate(templatePath)) {
 			throw new JourError('Invalid template format\n\nJour uses handlebars. Read about it here https://handlebarsjs.com')
 		}
 		if (this.config.updateTemplate(template)) {
@@ -71,23 +71,23 @@ export class JourSystem {
 	// }
 
 	ConnectGitStorage(gitRemote?: string | boolean): void {
-		const jourPath = JourConfig.getCurrentJourPath()
+		const jourPath = JourConfig.GetCurrentJourPath()
 		if (typeof (gitRemote) === 'boolean') {
 			gitRemote = ""
 		}
-		GitHandler.init(this, jourPath, gitRemote)
+		GitHandler.Init(this, jourPath, gitRemote)
 		this.LOG.info('Git connected in', jourPath)
 	}
 
 	Save(): void {
-		const jourPath = JourConfig.getCurrentJourPath() // I think this is available in the config.
-		GitHandler.save(this, jourPath)
+		const jourPath = JourConfig.GetCurrentJourPath() // I think this is available in the config.
+		GitHandler.Save(this, jourPath)
 		this.LOG.info('Saved in git', jourPath)
 	}
 
 	Upload(): void {
-		const jourPath = JourConfig.getCurrentJourPath()
-		GitHandler.upload(this, jourPath)
+		const jourPath = JourConfig.GetCurrentJourPath()
+		GitHandler.Upload(this, jourPath)
 		this.LOG.info('Uploaded in git', jourPath)
 	}
 
@@ -108,7 +108,7 @@ export class JourSystem {
 		this.LOG.debug(JSON.stringify(pj.dependencies, null, 2))
 	}
 	Open(): void {
-		const jourPath = JourConfig.getCurrentJourPath()
+		const jourPath = JourConfig.GetCurrentJourPath()
 		FileSystem.Open(jourPath)
 	}
 	Locale(locale: string): void {
@@ -148,7 +148,7 @@ export class JourSystem {
 	}
 
 	List(): void {
-		const jourDirectory = JourConfig.getCurrentJourPath()
+		const jourDirectory = JourConfig.GetCurrentJourPath()
 		const files = FileSystem.FilesInDirectory(jourDirectory).filter(file => {
 			return file.startsWith('jour-') && file.endsWith('.md')
 		})

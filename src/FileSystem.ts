@@ -11,27 +11,27 @@ import { homedir } from 'os'
 import { execSync } from 'child_process'
 import { JourError } from './JourError'
 export class FileSystem {
-	static getRealPath(path: string): string {
+	static GetRealPath(path: string): string {
 		return realpathSync(path)
 	}
 	static JoinResolve(...pathParts: string[]): string {
 		return resolve(join(...pathParts))
 	}
-	static writeFile(path: string, absoluteJourPath: string, overwrite = false): void {
-		if (overwrite || !FileSystem.isFile(path)) {
+	static WriteFile(path: string, absoluteJourPath: string, overwrite = false): void {
+		if (overwrite || !FileSystem.IsFile(path)) {
 			writeFileSync(path, absoluteJourPath)
 		}
 	}
-	static pathExists(path: string): boolean {
+	static PathExists(path: string): boolean {
 		return existsSync(path)
 	}
-	static isFile(path: string): boolean {
-		return FileSystem.pathExists(path) && lstatSync(path).isFile()
+	static IsFile(path: string): boolean {
+		return FileSystem.PathExists(path) && lstatSync(path).isFile()
 	}
-	static isDirectory(path: string): boolean {
-		return FileSystem.pathExists(path) && lstatSync(path).isDirectory()
+	static IsDirectory(path: string): boolean {
+		return FileSystem.PathExists(path) && lstatSync(path).isDirectory()
 	}
-	static readFile(path: string): string {
+	static ReadFile(path: string): string {
 		try {
 			return readFileSync(path).toString()
 		} catch (error) {
@@ -39,7 +39,7 @@ export class FileSystem {
 		}
 	}
 	static FilesInDirectory(path: string): string[] {
-		if (FileSystem.isDirectory(path)) {
+		if (FileSystem.IsDirectory(path)) {
 			return readdirSync(path)
 		} else {
 			throw new JourError("Not a directory. FilesInDirectory requires a directory")
