@@ -1,4 +1,3 @@
-import path from 'path'
 import { FileSystem } from './FileSystem'
 
 
@@ -14,19 +13,19 @@ export class JourConfig {
 		public locale: string = Intl.DateTimeFormat().resolvedOptions().locale,
 	){}
 
-	updateTemplate(template: string) {
+	updateTemplate(template: string): boolean {
 		this.template = template
 		return this.save()
 	}
-	updateExtraData(extraData: Record<string, unknown>){
+	updateExtraData(extraData: Record<string, unknown>): boolean {
 		this.extraData = extraData
 		return this.save()
 	}
-	updateLocale(locale: string) {
+	updateLocale(locale: string): boolean {
 		this.locale = locale
 		return this.save()
 	}
-	save() {
+	save(): boolean {
 		const configPath = JourConfig.getJourConfigPath()
 		const fullConfigContent = JSON.parse(FileSystem.readFile(configPath) || "{}")
 		fullConfigContent.template = this.template
@@ -37,7 +36,7 @@ export class JourConfig {
 		return true
 	}
 	static getGlobalSettingsPath(): string { // Should be private, but need it right now
-		return path.resolve(path.join(__dirname, '..', 'jour.settings'))
+		return FileSystem.JoinResolve(FileSystem.HomeDir(), '.jour.settings')
 	}
 
 	static getCurrentJourPath(): string {
@@ -50,7 +49,7 @@ export class JourConfig {
 	}
 
 	private static getJourConfigPath(){
-		return path.join(JourConfig.getCurrentJourPath(), 'jour.json')
+		return FileSystem.JoinResolve(JourConfig.getCurrentJourPath(), 'jour.json')
 	}
 
 	static getJourConfig(): JourConfig {

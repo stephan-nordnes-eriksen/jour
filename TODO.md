@@ -28,3 +28,8 @@
 - [ ] Actually useful unit tests.
 - [X] Minus days. "jour -1" => today -1 day. "jour -7" = today - 7 days
 - [ ] Set specific date. "jour --date 20.01.2021 That day I did this thing"
+- [ ] Consider; Adding a "jour tag" to the entries. It could include some metadata about the file, such as template name, date created, and so on. This way we could possibly make more advanced features like yearly update, and so on, where you generate a year-by-year comparison of the same day. Eg. 23.01.2019, 23.01.2020, etc. I think it could be the first line of the file: "jour: Base64EncodedString/JWT"
+- [ ] Possibly do a git add when creating new entries
+- [ ] Support multiple simultaneous journals. Eg. I have a daily journal, but what if I want a dream journal as well.
+  - [ ] Register more than one "dir". I think "jour --register (--resume/--init/--register) NAME PATH", then you can do "jour -j NAME today I did whatever" and "jour -j 1 today I dreamed whatever"
+- [ ] **** Move jour.settings to ~/.jour.settings ****
