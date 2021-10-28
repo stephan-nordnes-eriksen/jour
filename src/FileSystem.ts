@@ -1,39 +1,51 @@
-import fs from 'fs'
+import {
+	realpathSync,
+	writeFileSync,
+	existsSync,
+	lstatSync,
+	readFileSync,
+	readdirSync,
+} from 'fs'
+import { resolve, join } from 'path'
+import { homedir } from 'os'
 import { execSync } from 'child_process'
 import { JourError } from './JourError'
 export class FileSystem {
 	static getRealPath(path: string): string {
-		return fs.realpathSync(path)
+		return realpathSync(path)
 	}
-	static writeFile(path: string, absoluteJourPath: string, overwrite = false) {
+	static JoinResolve(...pathParts: string[]): string {
+		return resolve(join(...pathParts))
+	}
+	static writeFile(path: string, absoluteJourPath: string, overwrite = false): void {
 		if (overwrite || !FileSystem.isFile(path)) {
-			fs.writeFileSync(path, absoluteJourPath)
+			writeFileSync(path, absoluteJourPath)
 		}
 	}
 	static pathExists(path: string): boolean {
-		return fs.existsSync(path)
+		return existsSync(path)
 	}
 	static isFile(path: string): boolean {
-		return FileSystem.pathExists(path) && fs.lstatSync(path).isFile()
+		return FileSystem.pathExists(path) && lstatSync(path).isFile()
 	}
 	static isDirectory(path: string): boolean {
-		return FileSystem.pathExists(path) && fs.lstatSync(path).isDirectory()
+		return FileSystem.pathExists(path) && lstatSync(path).isDirectory()
 	}
 	static readFile(path: string): string {
 		try {
-			return fs.readFileSync(path).toString()
+			return readFileSync(path).toString()
 		} catch (error) {
 			return ""
 		}
 	}
 	static FilesInDirectory(path: string): string[] {
-		if(FileSystem.isDirectory(path)){
-			return fs.readdirSync(path)
+		if (FileSystem.isDirectory(path)) {
+			return readdirSync(path)
 		} else {
 			throw new JourError("Not a directory. FilesInDirectory requires a directory")
 		}
 	}
-	static Open(path: string) {
+	static Open(path: string): unknown {
 		switch (process.platform) {
 		case 'darwin':
 			return execSync('open ' + path)
@@ -42,5 +54,8 @@ export class FileSystem {
 		default:
 			return execSync('xdg-open ' + path)
 		}
+	}
+	static HomeDir(): string {
+		return homedir()
 	}
 }
