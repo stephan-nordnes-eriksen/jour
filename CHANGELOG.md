@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.1.4 (2021-10-28)
+
+
+### Bug Fixes
+
+* **refactor:** uppercase static methods ([75b036a](https://github.com/stephan-nordnes-eriksen/jour/commit/75b036acd4010740da85776475426b2d693f3334))
+
 ### 1.1.3 (2021-10-27)
 
 
