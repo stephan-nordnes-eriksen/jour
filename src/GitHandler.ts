@@ -3,7 +3,7 @@ import { JourError } from './JourError'
 import { JourSystem } from './JourSystem'
 
 export class GitHandler {
-	static init(js: JourSystem, directory: string, gitRemote?: string) {
+	static Init(js: JourSystem, directory: string, gitRemote?: string) {
 		try {
 			execSync('git rev-parse --is-inside-work-tree', {
 				cwd: directory,
@@ -32,7 +32,7 @@ export class GitHandler {
 			cwd: directory
 		})
 	}
-	static save(js: JourSystem,directory: string) {
+	static Save(js: JourSystem,directory: string) {
 		const now = new Date()
 
 		execSync('git add .', {
@@ -42,7 +42,7 @@ export class GitHandler {
 			cwd: directory
 		})
 	}
-	static upload(js: JourSystem, directory: string) {
+	static Upload(js: JourSystem, directory: string) {
 		execSync('git push origin jour', {
 			cwd: directory
 		})

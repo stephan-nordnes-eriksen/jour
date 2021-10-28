@@ -26,47 +26,47 @@ export class JourConfig {
 		return this.save()
 	}
 	save(): boolean {
-		const configPath = JourConfig.getJourConfigPath()
-		const fullConfigContent = JSON.parse(FileSystem.readFile(configPath) || "{}")
+		const configPath = JourConfig.GetJourConfigPath()
+		const fullConfigContent = JSON.parse(FileSystem.ReadFile(configPath) || "{}")
 		fullConfigContent.template = this.template
 		fullConfigContent.extraData = this.extraData
 		fullConfigContent.locale = this.locale
 
-		FileSystem.writeFile(configPath, JSON.stringify(fullConfigContent, null, 2), true)
+		FileSystem.WriteFile(configPath, JSON.stringify(fullConfigContent, null, 2), true)
 		return true
 	}
-	static getGlobalSettingsPath(): string { // Should be private, but need it right now
+	static GetGlobalSettingsPath(): string { // Should be private, but need it right now
 		return FileSystem.JoinResolve(FileSystem.HomeDir(), '.jour.settings')
 	}
 
-	static getCurrentJourPath(): string {
+	static GetCurrentJourPath(): string {
 		if(cachedJourPath) {
 			return cachedJourPath
 		}
-		const settingsPath = JourConfig.getGlobalSettingsPath()
-		cachedJourPath = FileSystem.readFile(settingsPath)
+		const settingsPath = JourConfig.GetGlobalSettingsPath()
+		cachedJourPath = FileSystem.ReadFile(settingsPath)
 		return cachedJourPath
 	}
 
-	private static getJourConfigPath(){
-		return FileSystem.JoinResolve(JourConfig.getCurrentJourPath(), 'jour.json')
+	private static GetJourConfigPath(){
+		return FileSystem.JoinResolve(JourConfig.GetCurrentJourPath(), 'jour.json')
 	}
 
-	static getJourConfig(): JourConfig {
+	static GetJourConfig(): JourConfig {
 		if(cachedJourConfig) {
 			return cachedJourConfig
 		}
-		cachedJourConfig = this.loadConfigFile()
-		cachedJourConfig.path = JourConfig.getCurrentJourPath()
+		cachedJourConfig = this.LoadConfigFile()
+		cachedJourConfig.path = JourConfig.GetCurrentJourPath()
 		return cachedJourConfig
 	}
-	private static loadConfigFile(): JourConfig {
+	private static LoadConfigFile(): JourConfig {
 		try {
-			const configPath = JourConfig.getJourConfigPath()
-			const jsonConfig = JSON.parse(FileSystem.readFile(configPath))
+			const configPath = JourConfig.GetJourConfigPath()
+			const jsonConfig = JSON.parse(FileSystem.ReadFile(configPath))
 
 			return new JourConfig(
-				JourConfig.getCurrentJourPath(),
+				JourConfig.GetCurrentJourPath(),
 				jsonConfig?.template || defaultConfig.template,
 				jsonConfig?.extraData || defaultConfig.extraData,
 				new Date(),

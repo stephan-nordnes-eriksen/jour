@@ -63,7 +63,7 @@ $ jour --day -23 --week 2 --year -3 Strange times
 		const programOptions = program.opts()
 		const LOG = new Logger(!!programOptions.verbose)
 		try {
-			const config = JourConfig.getJourConfig()
+			const config = JourConfig.GetJourConfig()
 			const jour = new JourSystem(config, LOG)
 
 			if (programOptions.day && ! isNaN(Number(programOptions.day))) {
