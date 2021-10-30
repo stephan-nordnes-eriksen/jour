@@ -1,5 +1,5 @@
 import Handlebars from 'handlebars'
-import path from 'path'
+import { basename, extname } from 'path'
 import { FileSystem } from './FileSystem'
 import { JourError } from './JourError'
 import { JourSystem } from './JourSystem'
@@ -34,7 +34,6 @@ export class TemplateData {
 export class Template {
 	static ProcessTemplateName(js: JourSystem, templateName = "memo", templateData: TemplateData): string {
 		// Dirty code
-		js.LOG.debug('__dirname', __dirname)
 		const templateFilePath = Template.ToPath(templateName)
 		js.LOG.debug('templateFilePath', templateFilePath)
 		if (Template.IsValidTemplateLocation(templateFilePath)){
@@ -59,13 +58,20 @@ export class Template {
 	}
 	static IsValidTemplateLocation(templateNameOrPath: string): boolean {
 		return FileSystem.IsFile(templateNameOrPath)
-		|| FileSystem.IsFile(path.join(__dirname, '..', 'templates', templateNameOrPath + '.hbs'))
+		|| FileSystem.IsFile(FileSystem.JoinResolve(__dirname, '..', 'templates', templateNameOrPath + '.hbs'))
 	}
 	static ToPath(templateNameOrPath: string): string {
 		if(FileSystem.IsFile(templateNameOrPath)){
 			return FileSystem.GetRealPath(templateNameOrPath)
 		} else {
-			return path.join(__dirname, '..', 'templates', templateNameOrPath + '.hbs')
+			return FileSystem.JoinResolve(__dirname, '..', 'templates', templateNameOrPath + '.hbs')
 		}
+	}
+
+	static ListTemplates(): string[] {
+		const files = FileSystem.FilesInDirectory(FileSystem.JoinResolve(__dirname, '..', 'templates'))
+		return files.map(file => {
+			return basename(file, extname(file))
+		})
 	}
 }

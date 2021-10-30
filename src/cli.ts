@@ -25,6 +25,7 @@ program
 	.option('-w, --week <number>', 'Week offset')
 	.option('-y, --year <number>', 'Year offset')
 	.option('-ls, --list', 'List jour entries')
+	.option('-lst, --list-templates', 'List pre-defined templates')
 // .version("1.0.0") // TODO: Load config and set this, or maybe not?
 	.addHelpText('after', `
 Examples:
@@ -121,6 +122,10 @@ $ jour --day -23 --week 2 --year -3 Strange times
 			case !!programOptions.list:
 				LOG.debug('Running list')
 				jour.List()
+				break
+			case !!programOptions.listTemplates:
+				LOG.debug('Running list-templates')
+				jour.ListTemplates()
 				break
 			default:
 				LOG.debug('Running default')
