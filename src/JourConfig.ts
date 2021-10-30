@@ -1,8 +1,56 @@
 import { FileSystem } from './FileSystem'
+import { JourError } from './JourError'
+import { Logger } from './Logger'
 
 
-let cachedJourPath = ""
+let cachedJourPath = ''
 let cachedJourConfig: JourConfig | undefined = undefined
+
+export class JourGlobalSettings {
+	/**
+	 *
+	 * @param journals Array of available directories which contains a journal
+	 * @param currentJournal The current selected journal
+	 */
+	constructor(
+		public journals: { [key: string]: string },
+		public currentJournal?: string,
+	) { }
+
+	RegisterJournal(absoluteJourPath: string, jourName: string | undefined): void {
+		// throw new Error('Method not implemented.')
+		if (FileSystem.IsDirectory(absoluteJourPath)) {
+			if (!this.journals[jourName || absoluteJourPath]) {
+				this.journals[jourName || absoluteJourPath] = absoluteJourPath
+			}
+			this.SetCurrentJour(absoluteJourPath)
+		} else {
+			throw new JourError('Not a directory')
+		}
+	}
+	SetCurrentJour(absoluteJourPath: string): void {
+		this.currentJournal = absoluteJourPath
+		Logger.info('Jour directory set to', absoluteJourPath)
+	}
+
+	Save(): void {
+		FileSystem.WriteFile(JourGlobalSettings.GetGlobalSettingsPath(), JSON.stringify(this), true)
+	}
+	static GetGlobalSettingsPath(): string { // Should be private, but need it right now
+		return FileSystem.JoinResolve(FileSystem.HomeDir(), '.jour.settings')
+	}
+
+	static GetGlobalSettings(): JourGlobalSettings {
+		try {
+			const globalSettings = JSON.parse(FileSystem.ReadFile(JourGlobalSettings.GetGlobalSettingsPath(), '{}'))
+			globalSettings.journals = Array.isArray(globalSettings?.currentJournal) ? globalSettings.currentJournal.map((e: unknown) => String(e)) : []
+			globalSettings.currentJournal = typeof (globalSettings?.currentJournal) === 'string' ? globalSettings.currentJournal : undefined
+			return new JourGlobalSettings(globalSettings?.journals || {}, globalSettings?.currentJournal)
+		} catch (error) {
+			return new JourGlobalSettings({})
+		}
+	}
+}
 
 export class JourConfig {
 	constructor(
@@ -11,19 +59,19 @@ export class JourConfig {
 		public extraData: Record<string, unknown>,
 		public currentTime: Date = new Date(),
 		public locale: string = Intl.DateTimeFormat().resolvedOptions().locale,
-	){}
+	) { }
 
 	updateTemplate(template: string): boolean {
 		this.template = template
-		return this.save()
+		return this.save() // TODO: This makes it harder to unit-test. We should not save automagically. Save explicity on the outside
 	}
 	updateExtraData(extraData: Record<string, unknown>): boolean {
 		this.extraData = extraData
-		return this.save()
+		return this.save() // TODO: This makes it harder to unit-test. We should not save automagically. Save explicity on the outside
 	}
 	updateLocale(locale: string): boolean {
 		this.locale = locale
-		return this.save()
+		return this.save() // TODO: This makes it harder to unit-test. We should not save automagically. Save explicity on the outside
 	}
 	save(): boolean {
 		const configPath = JourConfig.GetJourConfigPath()
@@ -35,25 +83,22 @@ export class JourConfig {
 		FileSystem.WriteFile(configPath, JSON.stringify(fullConfigContent, null, 2), true)
 		return true
 	}
-	static GetGlobalSettingsPath(): string { // Should be private, but need it right now
-		return FileSystem.JoinResolve(FileSystem.HomeDir(), '.jour.settings')
-	}
 
 	static GetCurrentJourPath(): string {
-		if(cachedJourPath) {
+		if (cachedJourPath) {
 			return cachedJourPath
 		}
-		const settingsPath = JourConfig.GetGlobalSettingsPath()
-		cachedJourPath = FileSystem.ReadFile(settingsPath)
+		const settingsPath = JourGlobalSettings.GetGlobalSettings()
+		cachedJourPath = settingsPath.currentJournal || ''
 		return cachedJourPath
 	}
 
-	private static GetJourConfigPath(){
+	private static GetJourConfigPath() {
 		return FileSystem.JoinResolve(JourConfig.GetCurrentJourPath(), 'jour.json')
 	}
 
 	static GetJourConfig(): JourConfig {
-		if(cachedJourConfig) {
+		if (cachedJourConfig) {
 			return cachedJourConfig
 		}
 		cachedJourConfig = this.LoadConfigFile()
@@ -73,7 +118,7 @@ export class JourConfig {
 				jsonConfig?.locale || defaultConfig.locale,
 			)
 		} catch (error) {
-			if(error.message !== 'Unexpected end of JSON input'){
+			if (error.message !== 'Unexpected end of JSON input') {
 				console.error('Error reading config file. Using default', error)
 			}
 			return defaultConfig

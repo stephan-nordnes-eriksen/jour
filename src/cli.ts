@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import { Command } from 'commander'
-
 import { JourConfig } from './JourConfig.js'
 import { JourError } from './JourError.js'
 import { JourSystem } from './JourSystem.js'
@@ -10,7 +9,7 @@ import { Logger } from './Logger.js'
 const program = new Command("jour")
 //.argument('<words...>') // This seems suboptimal
 program
-	.option('-D, --dir <directory>', 'Set jour directory')
+	.option('-r, --register <directory>', 'Set jour directory')
 	.option('-t, --template <template-name>', 'Set which template to use. Name, or path to template')
 	.option('-i, --info', 'Display information about current jour directory')
 	.option('-v, --version', 'Display version info')
@@ -62,10 +61,10 @@ $ jour --day -23 --week 2 --year -3 Strange times
 `)
 	.action(() => {
 		const programOptions = program.opts()
-		const LOG = new Logger(!!programOptions.verbose)
+		Logger.SetDebugMode(!!programOptions.verbose)
 		try {
 			const config = JourConfig.GetJourConfig()
-			const jour = new JourSystem(config, LOG)
+			const jour = new JourSystem(config)
 
 			if (programOptions.day && ! isNaN(Number(programOptions.day))) {
 				config.currentTime.setDate(config.currentTime.getDate() + Number(programOptions.day))
@@ -77,65 +76,65 @@ $ jour --day -23 --week 2 --year -3 Strange times
 				config.currentTime.setDate(config.currentTime.getDate() + 365 * Number(programOptions.year))
 			}
 			config.currentTime
-			LOG.debug('program.args', program.args)
+			Logger.debug('program.args', program.args)
 			switch (true) {
-			case !!programOptions.dir:
-				LOG.debug('Running dir')
-				jour.Directory(programOptions.dir)
+			case !!programOptions.register:
+				Logger.debug('Running register')
+				jour.Register(programOptions.dir)
 				break
 			case !!programOptions.template:
-				LOG.debug('Running template')
+				Logger.debug('Running template')
 				jour.Template(programOptions.template)
 				break
 			case !!programOptions.connect:
-				LOG.debug('Running connect')
+				Logger.debug('Running connect')
 				jour.ConnectGitStorage(programOptions.connect)
 				break
 			case !!programOptions.save:
-				LOG.debug('Running save')
+				Logger.debug('Running save')
 				jour.Save()
 				break
 			case !!programOptions.upload:
-				LOG.debug('Running upload')
+				Logger.debug('Running upload')
 				jour.Upload()
 				break
 			case !!programOptions.info:
-				LOG.debug('Running info')
+				Logger.debug('Running info')
 				jour.Info()
 				break
 			case !!programOptions.version:
-				LOG.debug('Running version')
+				Logger.debug('Running version')
 				jour.Version()
 				break
 			case !!programOptions.open:
-				LOG.debug('Running open')
+				Logger.debug('Running open')
 				jour.Open()
 				break
 			case !!programOptions.locale:
-				LOG.debug('Running locale')
+				Logger.debug('Running locale')
 				jour.Locale(programOptions.locale)
 				break
 			case !!programOptions.about:
-				LOG.debug('Running about')
+				Logger.debug('Running about')
 				jour.About()
 				break
 			case !!programOptions.list:
-				LOG.debug('Running list')
+				Logger.debug('Running list')
 				jour.List()
 				break
 			case !!programOptions.listTemplates:
-				LOG.debug('Running list-templates')
+				Logger.debug('Running list-templates')
 				jour.ListTemplates()
 				break
 			default:
-				LOG.debug('Running default')
-				LOG.debug('programOptions', programOptions)
+				Logger.debug('Running default')
+				Logger.debug('programOptions', programOptions)
 				jour.NewJourEntry(program?.args?.join(' ') || '')
 				break
 			}
 		} catch (error) {
 			if(error instanceof JourError){
-				LOG.error(error.message)
+				Logger.error(error.message)
 				process.exit(1)
 			}
 		}

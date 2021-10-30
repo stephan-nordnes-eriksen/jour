@@ -1,5 +1,5 @@
 import path from 'path'
-import { JourConfig } from './JourConfig'
+import { JourConfig, JourGlobalSettings } from './JourConfig'
 import { jourTemplate, Template } from './Template'
 import { openFile } from './crossPlatformFileOpener'
 import { FileSystem } from './FileSystem'
@@ -8,8 +8,7 @@ import { Logger } from './Logger'
 import { GitHandler } from './GitHandler'
 import { JourError } from './JourError'
 export class JourSystem {
-	constructor(public config: JourConfig, public LOG: Logger) {
-
+	constructor(public config: JourConfig) {
 	}
 
 	NewJourEntry(title: string): void {
@@ -23,20 +22,20 @@ export class JourSystem {
 			throw new JourError("No template found.")
 		}
 		let jourEntryPath = path.join(jourDirectory, `jour-${this.config.currentTime.toLocaleDateString(this.config.locale).split(/ |\/|\./).join('-')}.md`)
-		this.LOG.debug('Jour entry path', jourEntryPath)
+		Logger.debug('Jour entry path', jourEntryPath)
 		if (FileSystem.IsFile(jourEntryPath)) {
 			if(title === "") {
 				FileSystem.Open(jourEntryPath)
-				this.LOG.info('Jour entry exists, opening', jourEntryPath)
+				Logger.info('Jour entry exists, opening', jourEntryPath)
 				return
 			}
 			jourEntryPath = jourEntryPath.slice(0, -3) + '-' + this.config.currentTime.getTime() + '.md'
 		}
 		FileSystem.WriteFile(jourEntryPath, template)
 		openFile(jourEntryPath)
-		this.LOG.info('Jour entry created at', jourEntryPath)
+		Logger.info('Jour entry created at', jourEntryPath)
 	}
-	Directory(jourPath?: string): void {
+	Register(jourPath?: string, jourName?: string): void {
 		if (!jourPath) {
 			throw new JourError('Please provide a valid path')
 		}
@@ -46,11 +45,12 @@ export class JourSystem {
 		} else {
 			absoluteJourPath = FileSystem.GetRealPath(absoluteJourPath)
 		}
-		this.LOG.debug('JourConfig.getGlobalSettingsPath()', JourConfig.GetGlobalSettingsPath())
-		this.LOG.debug('absoluteJourPath', absoluteJourPath)
-		this.LOG.debug('JourConfig.getGlobalSettingsPath()', JourConfig.GetGlobalSettingsPath())
-		FileSystem.WriteFile(JourConfig.GetGlobalSettingsPath(), absoluteJourPath, true)
-		this.LOG.info('Jour directory set to', absoluteJourPath)
+		Logger.debug('JourGlobalSettings.GetGlobalSettingsPath()', JourGlobalSettings.GetGlobalSettingsPath())
+		Logger.debug('absoluteJourPath', absoluteJourPath)
+		Logger.debug('JourGlobalSettings.GetGlobalSettingsPath()', JourGlobalSettings.GetGlobalSettingsPath())
+		const globalSettings = JourGlobalSettings.GetGlobalSettings()
+		globalSettings.RegisterJournal( absoluteJourPath, jourName)
+		globalSettings.Save()
 	}
 
 	Template(template: string): void {
@@ -62,7 +62,7 @@ export class JourSystem {
 			throw new JourError('Invalid template format\n\nJour uses handlebars. Read about it here https://handlebarsjs.com')
 		}
 		if (this.config.updateTemplate(template)) {
-			this.LOG.info('Template updated to', this.config.template)
+			Logger.info('Template updated to', this.config.template)
 		} else {
 			throw new JourError("Unable to save template change.")
 		}
@@ -75,37 +75,37 @@ export class JourSystem {
 		if (typeof (gitRemote) === 'boolean') {
 			gitRemote = ""
 		}
-		GitHandler.Init(this, jourPath, gitRemote)
-		this.LOG.info('Git connected in', jourPath)
+		GitHandler.Init(jourPath, gitRemote)
+		Logger.info('Git connected in', jourPath)
 	}
 
 	Save(): void {
 		const jourPath = JourConfig.GetCurrentJourPath() // I think this is available in the config.
-		GitHandler.Save(this, jourPath)
-		this.LOG.info('Saved in git', jourPath)
+		GitHandler.Save(jourPath)
+		Logger.info('Saved in git', jourPath)
 	}
 
 	Upload(): void {
 		const jourPath = JourConfig.GetCurrentJourPath()
-		GitHandler.Upload(this, jourPath)
-		this.LOG.info('Uploaded in git', jourPath)
+		GitHandler.Upload(jourPath)
+		Logger.info('Uploaded in git', jourPath)
 	}
 
 	Info(): void {
 		this.Version()
-		this.LOG.info('Current Jour directory ', this.config.path)
-		this.LOG.info('Template               ', this.config.template)
-		this.LOG.info('Extra data             ', this.config.extraData)
-		this.LOG.info('Locale                 ', this.config.locale)
-		this.LOG.debug('Full config:')
-		this.LOG.debug(JSON.stringify(this.config, null, 2))
+		Logger.info('Current Jour directory ', this.config.path)
+		Logger.info('Template               ', this.config.template)
+		Logger.info('Extra data             ', this.config.extraData)
+		Logger.info('Locale                 ', this.config.locale)
+		Logger.debug('Full config:')
+		Logger.debug(JSON.stringify(this.config, null, 2))
 	}
 	Version(): void {
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const pj = require('../package.json')
-		this.LOG.info('Jour CLI version', pj.version)
-		this.LOG.debug('Dependency versions:')
-		this.LOG.debug(JSON.stringify(pj.dependencies, null, 2))
+		Logger.info('Jour CLI version', pj.version)
+		Logger.debug('Dependency versions:')
+		Logger.debug(JSON.stringify(pj.dependencies, null, 2))
 	}
 	Open(): void {
 		const jourPath = JourConfig.GetCurrentJourPath()
@@ -119,30 +119,30 @@ export class JourSystem {
 			// Intl.getCanonicalLocales('EN_US');
 			actualLocale = Intl.DateTimeFormat(locale).resolvedOptions().locale
 		} catch (err) {
-			this.LOG.debug(err)
+			Logger.debug(err)
 			throw new JourError("Invalid locale " + locale)
 		}
 		if (this.config.updateLocale(actualLocale)) {
-			this.LOG.info('Locale updated to', locale)
+			Logger.info('Locale updated to', locale)
 		}
 	}
 	About(): void {
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const pj = require('../package.json')
-		this.LOG.info('')
-		this.LOG.info('')
-		this.LOG.info('Jour cli')
-		this.LOG.info('')
-		this.LOG.info('Created by')
-		this.LOG.info(pj.author.name)
-		this.LOG.info('')
-		this.LOG.info('License')
-		this.LOG.info(pj.license)
-		this.LOG.info('')
-		this.LOG.info('Code available at')
-		this.LOG.info('https://github.com/' + pj.repository)
-		this.LOG.info('   Give it a ⭐ if you like it!')
-		this.LOG.info('')
+		Logger.info('')
+		Logger.info('')
+		Logger.info('Jour cli')
+		Logger.info('')
+		Logger.info('Created by')
+		Logger.info(pj.author.name)
+		Logger.info('')
+		Logger.info('License')
+		Logger.info(pj.license)
+		Logger.info('')
+		Logger.info('Code available at')
+		Logger.info('https://github.com/' + pj.repository)
+		Logger.info('   Give it a ⭐ if you like it!')
+		Logger.info('')
 
 		this.printLogo("Jour CLI - Simply write 📔")
 	}
@@ -153,23 +153,23 @@ export class JourSystem {
 			return file.startsWith('jour-') && file.endsWith('.md')
 		})
 		if(files.length > 0) {
-			this.LOG.info("Jour entries:")
+			Logger.info("Jour entries:")
 		}
 		files.forEach(file => {
-			this.LOG.info(file)
+			Logger.info(file)
 		})
 	}
 
 	ListTemplates(): void {
-		this.LOG.info('Available templates')
+		Logger.info('Available templates')
 		Template.ListTemplates().forEach(template => {
-			this.LOG.info(template)
+			Logger.info(template)
 		})
 	}
 
 	async printLogo(inputText: string, progress = 1): Promise<unknown> {
 		if(progress > inputText.length){
-			this.LOG.info('')
+			Logger.info('')
 			return
 		}
 		process.stdout.clearLine(1)

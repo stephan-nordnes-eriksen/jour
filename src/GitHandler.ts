@@ -1,15 +1,15 @@
 import { execSync } from 'child_process'
 import { JourError } from './JourError'
-import { JourSystem } from './JourSystem'
+import { Logger } from './Logger'
 
 export class GitHandler {
-	static Init(js: JourSystem, directory: string, gitRemote?: string) {
+	static Init(directory: string, gitRemote?: string): void {
 		try {
 			execSync('git rev-parse --is-inside-work-tree', {
 				cwd: directory,
 				stdio: "ignore"
 			})
-			js.LOG.debug("Git already initialized")
+			Logger.debug("Git already initialized")
 			throw new JourError("Git already initialized")
 		} catch (error) {
 			// We expect that this git command throw an error if git isn't initialized
@@ -18,12 +18,12 @@ export class GitHandler {
 				throw error
 			}
 		}
-		js.LOG.info('Setting up git in directory ', directory)
+		Logger.info('Setting up git in directory ', directory)
 		execSync('git init', {
 			cwd: directory
 		})
 		if(gitRemote){
-			js.LOG.info(`Connecting to git remote ${gitRemote}`)
+			Logger.info(`Connecting to git remote ${gitRemote}`)
 			execSync(`git remote add origin ${gitRemote}`, {
 				cwd: directory
 			})
@@ -32,7 +32,7 @@ export class GitHandler {
 			cwd: directory
 		})
 	}
-	static Save(js: JourSystem,directory: string) {
+	static Save(directory: string): void {
 		const now = new Date()
 
 		execSync('git add .', {
@@ -42,7 +42,7 @@ export class GitHandler {
 			cwd: directory
 		})
 	}
-	static Upload(js: JourSystem, directory: string) {
+	static Upload(directory: string): void {
 		execSync('git push origin jour', {
 			cwd: directory
 		})
