@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.2.0 (2021-10-30)
+
+
+### Features
+
+* list-templates command ([7238e92](https://github.com/stephan-nordnes-eriksen/jour/commit/7238e92acedf0aa9cdd704820d596fc3295a6059))
+
 ### 1.1.4 (2021-10-28)
 
 
