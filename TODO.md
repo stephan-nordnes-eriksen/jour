@@ -1,39 +1,43 @@
-- [X] Do not overwrite existing journal entry
-- [X] template files (handlebar)
-- [X] settings-file in folder
-- [X] settings file with configs on templates and more.
-  - [X] Template file setting
-- [X] Possible git integration
+- [x] Do not overwrite existing journal entry
+- [x] template files (handlebar)
+- [x] settings-file in folder
+- [x] settings file with configs on templates and more.
+  - [x] Template file setting
+- [x] Possible git integration
   - [x] jour --save => git add . && git commit -m "jour saved"
   - [?] jour --upload => git push origin master
   - [?] jour --connect $1 => git origin add $1 (should work, but not tested with remote)
-- [X] typescript
-- [X] read config file in path, or default file
-- [X] Print current config with --info
-- [X] Update template saves relative path, not absolute
-- [X] Locale for time string
-- [X] Pretty json in config file
-- [X] standard-version
-- [X] github actions for builds and test
-- [X] Better control flow with throws and custom error type
+- [x] typescript
+- [x] read config file in path, or default file
+- [x] Print current config with --info
+- [x] Update template saves relative path, not absolute
+- [x] Locale for time string
+- [x] Pretty json in config file
+- [x] standard-version
+- [x] github actions for builds and test
+- [x] Better control flow with throws and custom error type
 - [ ] Add git-info to the --info command
 - [ ] add more to help-text
-- [X] Add about command
-- [X] Possibly make the empty jour command, eg `$ jour` open todays jour. Even the non-empty command could append to todays jour, and open.
+- [x] Add about command
+- [x] Possibly make the empty jour command, eg `$ jour` open todays jour. Even the non-empty command could append to todays jour, and open.
 - [ ] Consider having the non-empty jour command append to existing jour entry
 - [ ] -n, --new => Force new journal entry even if one is existing. We are kind-of doing this today with `$ jour Anything here`. If we do the above task, this becomes useful.
 - [ ] --template-new  Make almost-empty new template
-- [X] Rename to "jour"
+- [x] Rename to "jour"
 - [ ] Use built in version command (.version)
 - [ ] Actually useful unit tests.
-- [X] Minus days. "jour -1" => today -1 day. "jour -7" = today - 7 days
+- [x] Minus days. "jour -1" => today -1 day. "jour -7" = today - 7 days
 - [ ] Set specific date. "jour --date 20.01.2021 That day I did this thing"
 - [ ] Consider; Adding a "jour tag" to the entries. It could include some metadata about the file, such as template name, date created, and so on. This way we could possibly make more advanced features like yearly update, and so on, where you generate a year-by-year comparison of the same day. Eg. 23.01.2019, 23.01.2020, etc. I think it could be the first line of the file: "jour: Base64EncodedString/JWT"
 - [ ] Possibly do a git add when creating new entries
 - [ ] Support multiple simultaneous journals. Eg. I have a daily journal, but what if I want a dream journal as well.
   - [ ] Register more than one "dir". I think "jour --register (--resume/--init/--register) NAME PATH", then you can do "jour -j NAME today I did whatever" and "jour -j 1 today I dreamed whatever"
-- [X] **** Move jour.settings to ~/.jour.settings ****
-- [X] --lst, --list-templates
+  - [ ] List available journals
+  - [ ]
+- [x] **** Move jour.settings to ~/.jour.settings ****
+- [x] --lst, --list-templates
 - [ ] Possibly generate a readme in the journal you create to show usage, so that it is apparent from your git repo that it is jour-cli
 - [ ] Possibly automatically add jour entries to the readme to create a browsable, clickable, list on github et.al. Just "(jour entry 21.10.2021)[./jour-21-10-2021.md]" > README.md or something
+- [ ] Cleanup package.json
+- [ ] Consider making a todo-tool for managing this file. Todo-cli or whatever
 - [ ]
