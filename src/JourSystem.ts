@@ -1,7 +1,7 @@
 import path from 'path'
 import { JourConfig, JourGlobalSettings } from './JourConfig'
 import { jourTemplate, Template } from './Template'
-import { openFile } from './crossPlatformFileOpener'
+import { OpenFile } from './CrossPlatformFileOpener'
 import { FileSystem } from './FileSystem'
 
 import { Logger } from './Logger'
@@ -32,7 +32,7 @@ export class JourSystem {
 			jourEntryPath = jourEntryPath.slice(0, -3) + '-' + this.config.currentTime.getTime() + '.md'
 		}
 		FileSystem.WriteFile(jourEntryPath, template)
-		openFile(jourEntryPath)
+		OpenFile(jourEntryPath)
 		Logger.info('Jour entry created at', jourEntryPath)
 	}
 	Register(jourPath?: string, jourName?: string): void {
