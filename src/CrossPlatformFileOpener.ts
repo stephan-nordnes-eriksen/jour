@@ -1,6 +1,6 @@
 import { exec } from 'child_process'
 import os from 'os'
-export function openFile(path: string) {
+export function OpenFile(path: string) {
 	switch(os.platform()){
 	case 'darwin':
 		exec('open ' + path)
