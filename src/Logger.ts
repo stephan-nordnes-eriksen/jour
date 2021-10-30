@@ -1,16 +1,19 @@
-export class Logger {
-	constructor(private debugEnabled = false) {}
 
-	info(...data: unknown[]): void {
+export class Logger {
+	static debugMode = false
+	static SetDebugMode(debug: boolean): void {
+		this.debugMode = debug
+	}
+	static info(...data: unknown[]): void {
 		console.info(...data)
 	}
 
-	debug(...data: unknown[]): void {
-		if(this.debugEnabled){
+	static debug(...data: unknown[]): void {
+		if(Logger.debugMode){
 			console.debug(...data)
 		}
 	}
-	error(...data: unknown[]): void {
+	static error(...data: unknown[]): void {
 		console.error(...data)
 	}
 }
