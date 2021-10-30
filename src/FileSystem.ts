@@ -31,11 +31,11 @@ export class FileSystem {
 	static IsDirectory(path: string): boolean {
 		return FileSystem.PathExists(path) && lstatSync(path).isDirectory()
 	}
-	static ReadFile(path: string): string {
+	static ReadFile(path: string, defaultData = ""): string {
 		try {
 			return readFileSync(path).toString()
 		} catch (error) {
-			return ""
+			return defaultData
 		}
 	}
 	static FilesInDirectory(path: string): string[] {
