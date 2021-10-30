@@ -160,6 +160,13 @@ export class JourSystem {
 		})
 	}
 
+	ListTemplates(): void {
+		this.LOG.info('Available templates')
+		Template.ListTemplates().forEach(template => {
+			this.LOG.info(template)
+		})
+	}
+
 	async printLogo(inputText: string, progress = 1): Promise<unknown> {
 		if(progress > inputText.length){
 			this.LOG.info('')

@@ -32,4 +32,8 @@
 - [ ] Possibly do a git add when creating new entries
 - [ ] Support multiple simultaneous journals. Eg. I have a daily journal, but what if I want a dream journal as well.
   - [ ] Register more than one "dir". I think "jour --register (--resume/--init/--register) NAME PATH", then you can do "jour -j NAME today I did whatever" and "jour -j 1 today I dreamed whatever"
-- [ ] **** Move jour.settings to ~/.jour.settings ****
+- [X] **** Move jour.settings to ~/.jour.settings ****
+- [X] --lst, --list-templates
+- [ ] Possibly generate a readme in the journal you create to show usage, so that it is apparent from your git repo that it is jour-cli
+- [ ] Possibly automatically add jour entries to the readme to create a browsable, clickable, list on github et.al. Just "(jour entry 21.10.2021)[./jour-21-10-2021.md]" > README.md or something
+- [ ]
