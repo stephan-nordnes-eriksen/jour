@@ -10,13 +10,13 @@
 		"url": "https://snestudio.com"
 	},
 	"bin": {
-		"jour": "dist/cli.js"
+		"jour": "dist/Cli.js"
 	},
 	"engines": {
 		"node": ">=12"
 	},
 	"scripts": {
-		"build": "tsc; chmod +x dist/cli.js",
+		"build": "tsc; chmod +x dist/Cli.js",
 		"prepack": "npm run build",
 		"copy-static-assets": "ts-node copyStaticAssets.ts",
 		"debug": "npm run build && npm run watch-debug",
